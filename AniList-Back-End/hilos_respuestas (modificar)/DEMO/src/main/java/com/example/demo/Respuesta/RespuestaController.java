@@ -2,6 +2,8 @@ package com.example.demo.Respuesta;
 
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Hilos.HiloRepository;
+import com.example.demo.Usuario.Usuario;
+import com.example.demo.Usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ public class RespuestaController {
     @Autowired
     private HiloRepository hiloRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping
     public List<RespuestaDTO> getRespuestas() {
@@ -37,10 +41,41 @@ public class RespuestaController {
                         respuesta.getSubrespuestas().stream()
                                 .map(Respuesta::getId)
                                 .collect(Collectors.toList())
-                ))
+                ,respuesta.getHilo().getId()))
                 .collect(Collectors.toList());
 
         return respuestaDTOs;
+    }
+
+    @GetMapping("/{userId}/{hiloId}")
+    public ResponseEntity<List<RespuestaDTO>> getRespuestasByUserAndHilo(
+            @PathVariable Long userId,
+            @PathVariable Long hiloId) {
+        List<RespuestaDTO> respuestaDto = new ArrayList<>();
+        List<Long> temp = new ArrayList<>();
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(userId);
+        if(usuarioOptional.isPresent()){
+            List<Hilo> prueba = hiloRepository.findByUsuario(usuarioOptional.get());
+            for(Hilo hilo : prueba){
+                if(hilo.getId()==hiloId){
+                    List<Respuesta> respuestas = respuestaRepository.findByHilo(hilo);
+                    respuestaDto = respuestas.stream()
+                            .map(respuesta -> new RespuestaDTO(
+                                    respuesta.getId(),
+                                    respuesta.getContenido(),
+                                    respuesta.getSubrespuestas().stream()
+                                            .map(Respuesta::getId)
+                                            .collect(Collectors.toList())
+                                    ,respuesta.getHilo().getId()))
+                            .collect(Collectors.toList());
+                }
+            }
+            System.out.println(temp);
+        }
+
+
+
+        return new ResponseEntity<>(respuestaDto,HttpStatus.OK);
     }
 
     // Endpoint para crear una nueva respuesta
@@ -58,34 +93,27 @@ public class RespuestaController {
     @PatchMapping("/{respuestaId}")
     public ResponseEntity<RespuestaDTO> addSubrespuesta(
             @PathVariable Long respuestaId,
-            @RequestBody Respuesta subrespuesta) {
+            @RequestBody Respuesta subrespuesta){
+            Respuesta respuesta = respuestaRepository.findById(respuestaId)
+                    .orElseThrow(() -> new EntityNotFoundException("No se encontró la respuesta con el ID: " + respuestaId));
+            // Agrega la subrespuesta a la lista de subrespuestas
+            subrespuesta.setHilo(respuesta.getHilo());  // Asigna el mismo hilo a la subrespuesta
+            subrespuesta.setRespuestaPadre(respuesta);  // Establece la respuesta padre
 
-        Respuesta respuesta = respuestaRepository.findById(respuestaId)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró la respuesta con el ID: " + respuestaId));
+            respuesta.getSubrespuestas().add(subrespuesta);
 
-        // Verifica si la lista de subrespuestas es nula y, si es así, crea una nueva lista
-        if (respuesta.getSubrespuestas() == null) {
-            respuesta.setSubrespuestas(new ArrayList<>());
-        }
+            // Guarda la respuesta actualizada
+            respuesta = respuestaRepository.save(respuesta);
 
-        // Agrega la subrespuesta a la lista de subrespuestas
-        subrespuesta.setHilo(respuesta.getHilo());  // Asigna el mismo hilo a la subrespuesta
-        subrespuesta.setRespuestaPadre(respuesta);  // Establece la respuesta padre
+            // Mapea la respuesta a un RespuestaDTO para la respuesta
+            RespuestaDTO respuestaDTO = new RespuestaDTO(
+                    respuesta.getId(),
+                    respuesta.getContenido(),
+                    respuesta.getSubrespuestas().stream()
+                            .map(Respuesta::getId)
+                            .collect(Collectors.toList()),respuesta.getHilo().getId()
+            );
 
-        respuesta.getSubrespuestas().add(subrespuesta);
-
-        // Guarda la respuesta actualizada
-        respuesta = respuestaRepository.save(respuesta);
-
-        // Mapea la respuesta a un RespuestaDTO para la respuesta
-        RespuestaDTO respuestaDTO = new RespuestaDTO(
-                respuesta.getId(),
-                respuesta.getContenido(),
-                respuesta.getSubrespuestas().stream()
-                        .map(Respuesta::getId)
-                        .collect(Collectors.toList())
-        );
-
-        return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
+            return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
     }
 }

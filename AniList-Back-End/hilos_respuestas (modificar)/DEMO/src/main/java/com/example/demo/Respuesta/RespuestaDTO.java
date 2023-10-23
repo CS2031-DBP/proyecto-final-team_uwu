@@ -7,13 +7,18 @@ public class RespuestaDTO {
     private String contenido;
     private List<Long> subRespuestaIds;
 
+    private Long HiloId;
+
+
+
     public RespuestaDTO() {
     }
 
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds) {
+    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId) {
         this.id = id;
         this.contenido = contenido;
         this.subRespuestaIds = subRespuestaIds;
+        HiloId = hiloId;
     }
 
     public Long getId() {
@@ -38,5 +43,13 @@ public class RespuestaDTO {
 
     public void setSubRespuestaIds(List<Long> subRespuestaIds) {
         this.subRespuestaIds = subRespuestaIds;
+    }
+
+    public Long getHiloId() {
+        return HiloId;
+    }
+
+    public void setHiloId(Long hiloId) {
+        HiloId = hiloId;
     }
 }

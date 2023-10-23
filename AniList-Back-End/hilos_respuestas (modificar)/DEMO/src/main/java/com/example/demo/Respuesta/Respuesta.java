@@ -2,6 +2,7 @@ package com.example.demo.Respuesta;
 
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Usuario.Usuario;
+import com.example.demo.Usuario.UsuarioController;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -38,6 +39,10 @@ public class Respuesta {
     @OneToMany(mappedBy = "respuestaPadre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Respuesta> subrespuestas;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     @ManyToMany
     @JoinTable(
             name = "usuario_respuestas_participadas",
@@ -45,6 +50,7 @@ public class Respuesta {
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private Set<Usuario> usuariosParticipantes = new HashSet<>();
+
 
     // Constructor vacío
     public Respuesta() {
