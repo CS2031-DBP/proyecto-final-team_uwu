@@ -3,6 +3,7 @@ package com.example.demo.Hilos;
 import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
+import com.example.demo.labels.Label;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Hilo {
     @Column(nullable = false)
     private String tema;
 
+    @Lob
     @Column(nullable = false)
     private String contenido;
 
@@ -31,15 +33,33 @@ public class Hilo {
     @JoinColumn(name = "user_id")
     private Usuario usuario;
 
-    // Constructor vacío
+    @OneToMany(mappedBy = "hilo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Respuesta> respuestas = new ArrayList<>();
+
+    private Long cantidadReaccciones;
+
+    private Long cantidadReports;
+
+    @ManyToMany
+    @JoinTable(name = "hilo_label",
+            joinColumns = @JoinColumn(name = "hilo_id"),
+            inverseJoinColumns = @JoinColumn(name = "label_id"))
+    private List<Label> labels;
+
+
     public Hilo() {
     }
 
-    // Constructor con parámetros
-    public Hilo(String tema, String contenido, Date fechaCreacion) {
+    public Hilo(Long id, String tema, String contenido, Date fechaCreacion, Usuario usuario, Long cantidadReaccciones, Long cantidadReports, List<Label> labels, List<Respuesta> respuestas) {
+        this.id = id;
         this.tema = tema;
         this.contenido = contenido;
         this.fechaCreacion = fechaCreacion;
+        this.usuario = usuario;
+        this.cantidadReaccciones = cantidadReaccciones;
+        this.cantidadReports = cantidadReports;
+        this.labels = labels;
+        this.respuestas = respuestas;
     }
 
     // Getters y setters
@@ -75,10 +95,6 @@ public class Hilo {
         this.fechaCreacion = fechaCreacion;
     }
 
-    @OneToMany(mappedBy = "hilo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Respuesta> respuestas = new ArrayList<>();
-
-    // Getters y setters
     public List<Respuesta> getRespuestas() {
         return respuestas;
     }
@@ -93,5 +109,29 @@ public class Hilo {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Long getCantidadReaccciones() {
+        return cantidadReaccciones;
+    }
+
+    public void setCantidadReaccciones(Long cantidadReaccciones) {
+        this.cantidadReaccciones = cantidadReaccciones;
+    }
+
+    public Long getCantidadReports() {
+        return cantidadReports;
+    }
+
+    public void setCantidadReports(Long cantidadReports) {
+        this.cantidadReports = cantidadReports;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 }

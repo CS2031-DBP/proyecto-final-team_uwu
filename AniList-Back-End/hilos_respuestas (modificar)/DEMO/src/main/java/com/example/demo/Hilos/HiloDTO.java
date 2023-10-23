@@ -9,16 +9,12 @@ public class HiloDTO {
     private String contenido;
     private Date fechaCreacion;
     private List<Long> respuestaIds;
+    private Long userId;
+    private String userNickname;
 
-    // Include user information in HiloDTO
-    private Long userId; // User's ID
-    private String userNickname; // User's nickname
-
-    // Constructor vacío
     public HiloDTO() {
     }
 
-    // Constructor con parámetros
     public HiloDTO(Long id, String tema, String contenido, Date fechaCreacion, List<Long> respuestaIds, Long userId, String userNickname) {
         this.id = id;
         this.tema = tema;

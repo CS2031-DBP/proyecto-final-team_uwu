@@ -20,6 +20,7 @@ public class Respuesta {
     @Column(name = "is_report", nullable = false)
     private boolean isReport;
 
+    @Lob
     @Column(nullable = false)
     private String contenido;
 
