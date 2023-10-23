@@ -1,11 +1,14 @@
 package com.example.demo.Hilos;
 
+import com.example.demo.Labels.Label;
 import com.example.demo.Respuesta.Respuesta;
+
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "hilo") // Configura el nombre de la tabla
@@ -24,6 +27,16 @@ public class Hilo {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion", nullable = false) // Configura el nombre de la columna
     private Date fechaCreacion;
+
+    private Long cantidadReaccciones;
+
+    private Long cantidadReports;
+    
+    @ManyToMany
+    @JoinTable(name = "hilo_label",
+               joinColumns = @JoinColumn(name = "hilo_id"),
+               inverseJoinColumns = @JoinColumn(name = "label_id"))
+    private List<Label> labels;
 
     // Constructor vacío
     public Hilo() {
@@ -80,4 +93,25 @@ public class Hilo {
     public void setRespuestas(List<Respuesta> respuestas) {
         this.respuestas = respuestas;
     }
+
+    public List<Label> getLabels(){return this.labels;}
+    public void setLabels(List<Label> labels){this.labels=labels;}
+
+    public Long getCantidadReaccciones() {
+        return this.cantidadReaccciones;
+    }
+
+    public void getCantidadReaccciones(Long cantidadReaccciones) {
+        this.cantidadReaccciones = cantidadReaccciones;
+    }
+
+     public Long getCantidadReports() {
+        return this.cantidadReports;
+    }
+
+    public void setCantidadReports(Long cantidadReports) {
+        this.cantidadReports= cantidadReports;
+    }
 }
+
+ 
