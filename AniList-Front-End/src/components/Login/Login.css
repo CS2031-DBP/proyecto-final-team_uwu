@@ -1,0 +1,116 @@
+:root {
+  --widtContainer: 500px;
+  --colorButton: #007bff;
+
+}
+
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700");
+
+
+body {
+  background-image: url('https://images.unsplash.com/photo-1542272201-b1ca555f8505?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+
+
+
+}
+
+h1 {margin: 0;padding: 0;}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.log-in {
+  width: var(--widtContainer);
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+}
+
+.log-in__header {
+  line-height: 100px;
+  background: rgba(0, 0, 0, 0.1);
+
+}
+.log-in__header {
+  line-height: 100px;
+  background-image: url('https://i.imgur.com/aPK2Lge.jpg'); /* Reemplaza 'URL_DE_TU_IMAGEN' con la URL de tu imagen */
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+  background-position: center; /* Ajusta la posición de la imagen al centro */
+  color: #fff; /* Cambia el color del texto para que sea visible en la imagen de fondo */
+  position: relative; /* Asegura que los elementos hijos se posicionen correctamente */
+}
+
+.log-in__header span {
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.log-in__form {
+  padding: 16px;
+}
+
+.log-in__form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.7);
+  text-transform: uppercase;
+  font-size: 14px;
+  text-align: left;
+}
+
+.log-in__form-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 16px;
+}
+
+.log-in__form-submit {
+  background: var(--colorButton);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.log-in__form-submit:hover {
+  background: #0044cc;
+}
+
+.log-in__action {
+  margin-top: 16px;
+}
+
+.log-in__action a {
+  margin: 0 8px;
+  color: rgba(0, 0, 0, 0.7);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.log-in__action a:hover {
+  color: var(--colorButton);
+}
+
+
+
+

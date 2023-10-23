@@ -18,13 +18,16 @@ export const HeaderComponent = () => {
             <div className='links'>
                 <a href='/' className='link'>Home</a>
                 <a href='/' className='link'>Anime List</a>
-                <a href='/' className='link'>Forum</a>
+                <a href='/Forum' className='link'>Forum</a>
+
             </div>
                 <div className='search-bar-container'>
                     <SearchBar setResults={setResults} clearSearch={setClearSearch} />
                     <SearchResults results={results} clearSearch = {clearSearch} />
                 </div>  
             </div>
+            <a href='/Login' className='link'>Login</a>
+
     </div> )
 }
 export default HeaderComponent;

@@ -1,7 +1,10 @@
 import './App.css';
+
 import { AnimeDetails } from './components/AnimeDetails';
 import HeaderComponent from './components/Header/HeaderComponent';
 import { Index } from './components/Index';
+import { Login } from './components/Login/Login';
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -12,6 +15,7 @@ function App() {
           <Routes>
           <Route exact path='/' element={<Index/>}></Route>
           <Route path="/anime/:id" element={<AnimeDetails />}></Route>
+          <Route  path='/Login' element={<Login/>}></Route>
           </Routes>
       </BrowserRouter>
     </div>
