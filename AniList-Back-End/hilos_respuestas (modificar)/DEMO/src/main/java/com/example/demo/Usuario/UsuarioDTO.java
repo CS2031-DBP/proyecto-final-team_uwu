@@ -1,46 +1,30 @@
 package com.example.demo.Usuario;
 
+
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Respuesta.Respuesta;
-import jakarta.persistence.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "usuario")
-public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UsuarioDTO {
     private Long id;
-
     private String nickname;
-
-    private String contraseña;
-
     private String correo;
 
-    private String image_path;
+    private  String image_path;
 
+    private Set<Long> favoriteAnimeIds;
 
-    @ElementCollection
-    @CollectionTable(name = "usuario_animeFavorito", joinColumns = @JoinColumn(name = "usuario_id"))
-    @Column(name = "anime_id")
-    private Set<Long> favoriteAnimeIds = new HashSet<>();
+    private Set<Hilo> hilosCreados;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Hilo> hilosCreados = new HashSet<>();
+    private Set<Respuesta> respuestasParticipadas;
 
-    @ManyToMany(mappedBy = "usuariosParticipantes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Respuesta> respuestasParticipadas = new HashSet<>();
-
-    public Usuario() {
+    public UsuarioDTO() {
     }
 
-    public Usuario(Long id, String nickname, String contraseña, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
-        this.contraseña = contraseña;
         this.correo = correo;
         this.image_path = image_path;
         this.favoriteAnimeIds = favoriteAnimeIds;
@@ -62,14 +46,6 @@ public class Usuario {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
     }
 
     public String getCorreo() {

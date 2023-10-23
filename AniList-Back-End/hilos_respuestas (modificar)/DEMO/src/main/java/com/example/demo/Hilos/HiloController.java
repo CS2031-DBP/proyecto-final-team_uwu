@@ -1,6 +1,7 @@
 package com.example.demo.Hilos;
 
 import com.example.demo.Respuesta.Respuesta;
+import com.example.demo.Usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ public class HiloController {
 
     @Autowired
     private HiloRepository hiloRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     // Endpoint para obtener todos los hilos
     // Convierte una entidad Hilo en un HiloDTO

@@ -1,6 +1,8 @@
 package com.example.demo.Hilos;
 
 import com.example.demo.Respuesta.Respuesta;
+import com.example.demo.Usuario.Usuario;
+import com.example.demo.Usuario.UsuarioRepository;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,6 +26,10 @@ public class Hilo {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion", nullable = false) // Configura el nombre de la columna
     private Date fechaCreacion;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id") // This links the Thread to a User
+    private Usuario usuario;
 
     // Constructor vacío
     public Hilo() {
