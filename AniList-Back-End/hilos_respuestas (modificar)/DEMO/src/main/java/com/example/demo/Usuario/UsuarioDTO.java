@@ -4,6 +4,7 @@ package com.example.demo.Usuario;
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Respuesta.Respuesta;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class UsuarioDTO {
@@ -15,14 +16,14 @@ public class UsuarioDTO {
 
     private Set<Long> favoriteAnimeIds;
 
-    private Set<Hilo> hilosCreados;
+    private Set<Long> hilosCreados = new HashSet<>();
 
     private Set<Respuesta> respuestasParticipadas;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Long> hilosCreados, Set<Respuesta> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
         this.correo = correo;
@@ -72,11 +73,11 @@ public class UsuarioDTO {
         this.favoriteAnimeIds = favoriteAnimeIds;
     }
 
-    public Set<Hilo> getHilosCreados() {
+    public Set<Long> getHilosCreados() {
         return hilosCreados;
     }
 
-    public void setHilosCreados(Set<Hilo> hilosCreados) {
+    public void setHilosCreados(Set<Long> hilosCreados) {
         this.hilosCreados = hilosCreados;
     }
 

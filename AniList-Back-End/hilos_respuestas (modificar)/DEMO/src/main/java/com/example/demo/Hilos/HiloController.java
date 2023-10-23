@@ -56,9 +56,9 @@ public class HiloController {
                 .collect(Collectors.toList());
     }
     // Endpoint para crear un nuevo hilo
-    @PostMapping
-    public ResponseEntity<HiloDTO> createHilo(@RequestBody Hilo hilo, @RequestParam Long userId) {
-        Usuario usuario = usuarioRepository.findById(userId)
+    @PostMapping("/{idUser}")
+    public ResponseEntity<HiloDTO> createHilo(@RequestBody Hilo hilo, @PathVariable Long idUser) {
+        Usuario usuario = usuarioRepository.findById(idUser)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         hilo.setUsuario(usuario);

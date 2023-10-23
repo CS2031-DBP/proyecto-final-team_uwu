@@ -1,6 +1,7 @@
 package com.example.demo.Respuesta;
 
 import com.example.demo.Hilos.Hilo;
+import com.example.demo.Hilos.HiloRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,6 +21,10 @@ public class RespuestaController {
     private RespuestaRepository respuestaRepository;
 
     // Endpoint para obtener todas las respuestas
+    @Autowired
+    private HiloRepository hiloRepository;
+
+
     @GetMapping
     public List<RespuestaDTO> getRespuestas() {
         List<Respuesta> respuestas = respuestaRepository.findAll();
@@ -38,10 +44,15 @@ public class RespuestaController {
     }
 
     // Endpoint para crear una nueva respuesta
-    @PostMapping
-    public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta respuesta) {
-        Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
-        return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
+    @PostMapping("/{hiloId}")
+    public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta respuesta, @PathVariable Long hiloId) {
+        Optional<Hilo> existe = hiloRepository.findById(hiloId);
+        if (existe.isPresent()){
+            respuesta.setHilo(existe.get());
+            Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
+            return new ResponseEntity<>(new Respuesta(), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(new Respuesta(), HttpStatus.BAD_REQUEST);
     }
     // Método PATCH para añadir una subrespuesta a una respuesta existente
     @PatchMapping("/{respuestaId}")

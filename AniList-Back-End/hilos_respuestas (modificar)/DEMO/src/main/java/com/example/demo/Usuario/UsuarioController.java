@@ -2,6 +2,7 @@ package com.example.demo.Usuario;
 
 
 import com.example.demo.Hilos.Hilo;
+import com.example.demo.Hilos.HiloRepository;
 import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.Hilos.HiloService;
 import com.example.demo.Respuesta.RespuestaService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -29,6 +31,9 @@ public class UsuarioController {
     @Autowired
     RespuestaService respuestaService;
 
+    @Autowired
+    HiloRepository hiloRepository;
+
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
@@ -41,7 +46,9 @@ public class UsuarioController {
             usuarioDTO.setCorreo(usuario.getCorreo());
             usuarioDTO.setImage_path(usuario.getImage_path());
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
-            usuarioDTO.setHilosCreados(usuario.getHilosCreados());
+            for(Hilo hilos: usuario.getHilosCreados()){
+                usuarioDTO.getHilosCreados().add(hilos.getId());
+            }
             usuarioDTO.setRespuestasParticipadas(usuario.getRespuestasParticipadas());
             usuarioDTOs.add(usuarioDTO);
         }
@@ -57,7 +64,9 @@ public class UsuarioController {
             usuarioDTO.setCorreo(usuario.getCorreo());
             usuarioDTO.setImage_path(usuario.getImage_path());
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
-            usuarioDTO.setHilosCreados(usuario.getHilosCreados());
+            for(Hilo hilo: usuario.getHilosCreados()){
+                usuarioDTO.getHilosCreados().add(hilo.getId());
+            }
             usuarioDTO.setRespuestasParticipadas(usuario.getRespuestasParticipadas());
             return ResponseEntity.ok(usuarioDTO);
         } else {
@@ -118,14 +127,7 @@ public class UsuarioController {
             newUser.setNickname(usuarioDTO.getNickname());
             newUser.setCorreo(usuarioDTO.getCorreo());
             newUser.setImage_path(usuarioDTO.getImage_path());
-            Set<Long> favoriteAnimeIds = usuarioDTO.getFavoriteAnimeIds();
-            newUser.setFavoriteAnimeIds(favoriteAnimeIds);
-            Set<Hilo> hilosCreados = usuarioDTO.getHilosCreados();
-            newUser.setHilosCreados(hilosCreados);
-            Set<Respuesta> respuestasParticipadas = usuarioDTO.getRespuestasParticipadas();
-            newUser.setRespuestasParticipadas(respuestasParticipadas);
             usuarioService.createUser(newUser);
-
             // Return a success response
             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } catch (Exception e) {
