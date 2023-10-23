@@ -28,7 +28,7 @@ public class Hilo {
     private Date fechaCreacion;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // This links the Thread to a User
+    @JoinColumn(name = "user_id")
     private Usuario usuario;
 
     // Constructor vacío
@@ -85,5 +85,13 @@ public class Hilo {
 
     public void setRespuestas(List<Respuesta> respuestas) {
         this.respuestas = respuestas;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

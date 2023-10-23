@@ -10,17 +10,23 @@ public class HiloDTO {
     private Date fechaCreacion;
     private List<Long> respuestaIds;
 
+    // Include user information in HiloDTO
+    private Long userId; // User's ID
+    private String userNickname; // User's nickname
+
     // Constructor vacío
     public HiloDTO() {
     }
 
     // Constructor con parámetros
-    public HiloDTO(Long id, String tema, String contenido, Date fechaCreacion, List<Long> respuestaIds) {
+    public HiloDTO(Long id, String tema, String contenido, Date fechaCreacion, List<Long> respuestaIds, Long userId, String userNickname) {
         this.id = id;
         this.tema = tema;
         this.contenido = contenido;
         this.fechaCreacion = fechaCreacion;
         this.respuestaIds = respuestaIds;
+        this.userId = userId;
+        this.userNickname = userNickname;
     }
 
     // Getters y setters
@@ -62,5 +68,21 @@ public class HiloDTO {
 
     public void setRespuestaIds(List<Long> respuestaIds) {
         this.respuestaIds = respuestaIds;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
     }
 }

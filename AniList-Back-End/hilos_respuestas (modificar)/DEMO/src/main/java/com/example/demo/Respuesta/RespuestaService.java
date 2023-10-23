@@ -15,7 +15,7 @@ public class RespuestaService {
     UsuarioService usuarioService;
 
     public List<Respuesta> getResponsesParticipatedByUser(Usuario usuario) {
-        return respuestaRepository.findByUsuarioParticipante(usuario);
+        return respuestaRepository.findByUsuariosParticipantes(usuario);
     }
 
 }
