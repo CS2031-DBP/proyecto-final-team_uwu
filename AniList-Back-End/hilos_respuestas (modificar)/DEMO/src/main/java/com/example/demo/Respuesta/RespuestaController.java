@@ -4,6 +4,7 @@ import com.example.demo.Hilos.Hilo;
 import com.example.demo.Hilos.HiloRepository;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
+import com.example.demo.Usuario.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,9 @@ public class RespuestaController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     public List<RespuestaDTO> getRespuestas() {
         List<Respuesta> respuestas = respuestaRepository.findAll();
@@ -41,7 +45,7 @@ public class RespuestaController {
                         respuesta.getSubrespuestas().stream()
                                 .map(Respuesta::getId)
                                 .collect(Collectors.toList())
-                ,respuesta.getHilo().getId()))
+                ,respuesta.getHilo().getId(),respuesta.getUsuario().getId()))
                 .collect(Collectors.toList());
 
         return respuestaDTOs;
@@ -66,7 +70,7 @@ public class RespuestaController {
                                     respuesta.getSubrespuestas().stream()
                                             .map(Respuesta::getId)
                                             .collect(Collectors.toList())
-                                    ,respuesta.getHilo().getId()))
+                                    ,respuesta.getHilo().getId(),respuesta.getUsuario().getId()))
                             .collect(Collectors.toList());
                 }
             }
@@ -79,16 +83,49 @@ public class RespuestaController {
     }
 
     // Endpoint para crear una nueva respuesta
-    @PostMapping("/{hiloId}")
+    /*@PostMapping("/{hiloId}")   //genero una respuesta al hilo con id --> hiloId
     public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta respuesta, @PathVariable Long hiloId) {
         Optional<Hilo> existe = hiloRepository.findById(hiloId);
         if (existe.isPresent()){
             respuesta.setHilo(existe.get());
             Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
-            return new ResponseEntity<>(new Respuesta(), HttpStatus.CREATED);
+            return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
+        }else{
+        return ResponseEntity.badRequest().build();}
+    }*/
+
+    @PostMapping("/{hiloId}")
+    public ResponseEntity<Respuesta> createRespuesta(@RequestBody RespuestaDTO respuestaDTO, @PathVariable Long hiloId) {
+        if (respuestaDTO.getUsuarioid() == null) {
+            System.out.println(respuestaDTO.getHiloId());
+            System.out.println(respuestaDTO.getUsuarioid());
         }
-        return new ResponseEntity<>(new Respuesta(), HttpStatus.BAD_REQUEST);
+
+        Optional<Hilo> existe = hiloRepository.findById(hiloId);
+
+        if (existe.isPresent()) {
+            System.out.println("entrando a condicional");
+            Hilo hilo = existe.get();
+
+            // You can fetch the Usuario based on userNickname or userId
+            Usuario usuario = usuarioService.getUserById(respuestaDTO.getUsuarioid());
+            System.out.println(respuestaDTO.getUsuarioid());
+
+            if (usuario != null) {
+                Respuesta respuesta = new Respuesta();
+                respuesta.setContenido(respuestaDTO.getContenido());
+                respuesta.setHilo(hilo);
+                respuesta.setUsuario(usuario);  // Set the usuario who created the response
+
+                Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
+
+                return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
+            }
+        }
+
+        return ResponseEntity.badRequest().build();
     }
+
     // Método PATCH para añadir una subrespuesta a una respuesta existente
     @PatchMapping("/{respuestaId}")
     public ResponseEntity<RespuestaDTO> addSubrespuesta(
@@ -111,7 +148,8 @@ public class RespuestaController {
                     respuesta.getContenido(),
                     respuesta.getSubrespuestas().stream()
                             .map(Respuesta::getId)
-                            .collect(Collectors.toList()),respuesta.getHilo().getId()
+                            .collect(Collectors.toList()),respuesta.getHilo().getId(),
+                    respuesta.getUsuario().getId()
             );
 
             return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.example.demo.Hilos;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class HiloDTO {
     private String tema;
     private String contenido;
     private Date fechaCreacion;
-    private List<Long> respuestaIds;
+    private List<Long> respuestaIds = new ArrayList<>();
     private Long userId;
     private String userNickname;
 

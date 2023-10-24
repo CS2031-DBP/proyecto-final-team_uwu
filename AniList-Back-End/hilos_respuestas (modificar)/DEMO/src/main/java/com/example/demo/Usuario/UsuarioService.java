@@ -39,9 +39,6 @@ public class UsuarioService {
     }
 
     public void createUser(Usuario user) {
-        // You can perform validation or additional business logic here, if needed
-
-        // Save the new user to the database
         usuarioRepository.save(user);
     }
 

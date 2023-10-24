@@ -2,6 +2,7 @@ package com.example.demo.Usuario;
 
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Respuesta.Respuesta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -29,9 +30,11 @@ public class Usuario {
     private Set<Long> favoriteAnimeIds = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Hilo> hilosCreados = new HashSet<>();
 
     @ManyToMany(mappedBy = "usuariosParticipantes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Respuesta> respuestasParticipadas = new HashSet<>();
 
     public Usuario() {

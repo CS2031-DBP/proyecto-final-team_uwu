@@ -9,16 +9,19 @@ public class RespuestaDTO {
 
     private Long HiloId;
 
+    private Long usuarioid;
+
 
 
     public RespuestaDTO() {
     }
 
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId) {
+    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid) {
         this.id = id;
         this.contenido = contenido;
         this.subRespuestaIds = subRespuestaIds;
         HiloId = hiloId;
+        this.usuarioid = usuarioid;
     }
 
     public Long getId() {
@@ -51,5 +54,13 @@ public class RespuestaDTO {
 
     public void setHiloId(Long hiloId) {
         HiloId = hiloId;
+    }
+
+    public Long getUsuarioid() {
+        return usuarioid;
+    }
+
+    public void setUsuarioid(Long usuarioid) {
+        this.usuarioid = usuarioid;
     }
 }

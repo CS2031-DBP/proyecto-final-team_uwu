@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,7 +24,6 @@ public class HiloController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Endpoint para obtener todos los hilos
     // Convierte una entidad Hilo en un HiloDTO
     private HiloDTO convertToDTO(Hilo hilo) {
         HiloDTO dto = new HiloDTO();
@@ -55,6 +55,27 @@ public class HiloController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    @GetMapping("/{hiloId}")
+    public ResponseEntity<HiloDTO> getHilobyId(@PathVariable Long hiloId){
+        Optional<Hilo> Hexiste = hiloRepository.findById(hiloId);
+        if (Hexiste.isPresent()){
+            HiloDTO newHilo = new HiloDTO();
+            newHilo.setId(Hexiste.get().getId());
+            newHilo.setTema(Hexiste.get().getTema());
+            newHilo.setContenido(Hexiste.get().getContenido());
+            newHilo.setUserId(Hexiste.get().getUsuario().getId());
+            newHilo.setUserNickname(Hexiste.get().getUsuario().getNickname());
+            newHilo.setFechaCreacion(Hexiste.get().getFechaCreacion());
+            for(Respuesta respuesta: Hexiste.get().getRespuestas()){
+                newHilo.getRespuestaIds().add(respuesta.getId());
+            }
+            return ResponseEntity.ok(newHilo);
+        }
+
+        return new ResponseEntity<>(new HiloDTO(),HttpStatus.BAD_REQUEST);
+    }
+
+
     // Endpoint para crear un nuevo hilo
     @PostMapping("/{idUser}")
     public ResponseEntity<HiloDTO> createHilo(@RequestBody Hilo hilo, @PathVariable Long idUser) {

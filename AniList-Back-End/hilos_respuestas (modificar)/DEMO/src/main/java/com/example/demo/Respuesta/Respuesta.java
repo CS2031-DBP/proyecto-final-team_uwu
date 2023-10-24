@@ -3,6 +3,7 @@ package com.example.demo.Respuesta;
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioController;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -49,6 +50,7 @@ public class Respuesta {
             joinColumns = @JoinColumn(name = "respuesta_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
+    @JsonIgnore
     private Set<Usuario> usuariosParticipantes = new HashSet<>();
 
 
@@ -118,5 +120,21 @@ public class Respuesta {
 
     public void setSubrespuestas(List<Respuesta> subrespuestas) {
         this.subrespuestas = subrespuestas;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Set<Usuario> getUsuariosParticipantes() {
+        return usuariosParticipantes;
+    }
+
+    public void setUsuariosParticipantes(Set<Usuario> usuariosParticipantes) {
+        this.usuariosParticipantes = usuariosParticipantes;
     }
 }

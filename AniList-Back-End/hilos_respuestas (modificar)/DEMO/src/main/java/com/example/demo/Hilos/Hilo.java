@@ -4,6 +4,7 @@ import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
 import com.example.demo.labels.Label;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class Hilo {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "hilo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Respuesta> respuestas = new ArrayList<>();
 
     private Long cantidadReaccciones;

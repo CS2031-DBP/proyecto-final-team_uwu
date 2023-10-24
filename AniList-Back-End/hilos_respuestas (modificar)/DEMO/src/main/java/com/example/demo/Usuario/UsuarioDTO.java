@@ -18,12 +18,12 @@ public class UsuarioDTO {
 
     private Set<Long> hilosCreados = new HashSet<>();
 
-    private Set<Respuesta> respuestasParticipadas;
+    private Set<Long> respuestasParticipadas = new HashSet<>();
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Long> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Long> hilosCreados, Set<Long> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
         this.correo = correo;
@@ -81,11 +81,11 @@ public class UsuarioDTO {
         this.hilosCreados = hilosCreados;
     }
 
-    public Set<Respuesta> getRespuestasParticipadas() {
+    public Set<Long> getRespuestasParticipadas() {
         return respuestasParticipadas;
     }
 
-    public void setRespuestasParticipadas(Set<Respuesta> respuestasParticipadas) {
+    public void setRespuestasParticipadas(Set<Long> respuestasParticipadas) {
         this.respuestasParticipadas = respuestasParticipadas;
     }
 }

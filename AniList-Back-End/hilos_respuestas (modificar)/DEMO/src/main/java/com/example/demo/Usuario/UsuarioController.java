@@ -49,7 +49,9 @@ public class UsuarioController {
             for(Hilo hilos: usuario.getHilosCreados()){
                 usuarioDTO.getHilosCreados().add(hilos.getId());
             }
-            usuarioDTO.setRespuestasParticipadas(usuario.getRespuestasParticipadas());
+            for(Respuesta respuesta : usuario.getRespuestasParticipadas()){
+                usuarioDTO.getRespuestasParticipadas().add(respuesta.getId());
+            }
             usuarioDTOs.add(usuarioDTO);
         }
         return ResponseEntity.ok(usuarioDTOs);
@@ -67,7 +69,9 @@ public class UsuarioController {
             for(Hilo hilo: usuario.getHilosCreados()){
                 usuarioDTO.getHilosCreados().add(hilo.getId());
             }
-            usuarioDTO.setRespuestasParticipadas(usuario.getRespuestasParticipadas());
+            for(Respuesta respuesta : usuario.getRespuestasParticipadas()){
+                usuarioDTO.getRespuestasParticipadas().add(respuesta.getId());
+            }
             return ResponseEntity.ok(usuarioDTO);
         } else {
             return ResponseEntity.notFound().build();
