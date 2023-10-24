@@ -1,26 +1,24 @@
 package com.example.demo.Usuario;
 
 
+import com.example.demo.CapaSeguridad.domain.Usuario;
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Hilos.HiloRepository;
 import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.Hilos.HiloService;
 import com.example.demo.Respuesta.RespuestaService;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
@@ -37,13 +35,14 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
+        System.out.println("entrando");
         List<Usuario> usuarios = usuarioService.getUsuarios();
         List<UsuarioDTO> usuarioDTOs = new ArrayList<>();
         for(Usuario usuario : usuarios) {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
-            usuarioDTO.setCorreo(usuario.getCorreo());
+            usuarioDTO.setCorreo(usuario.getUsername());
             usuarioDTO.setImage_path(usuario.getImage_path());
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
             for(Hilo hilos: usuario.getHilosCreados()){
@@ -63,7 +62,7 @@ public class UsuarioController {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
-            usuarioDTO.setCorreo(usuario.getCorreo());
+            usuarioDTO.setCorreo(usuario.getUsername());
             usuarioDTO.setImage_path(usuario.getImage_path());
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
             for(Hilo hilo: usuario.getHilosCreados()){
@@ -129,7 +128,7 @@ public class UsuarioController {
             // Convert the UsuarioDTO to a Usuario entity
             Usuario newUser = new Usuario();
             newUser.setNickname(usuarioDTO.getNickname());
-            newUser.setCorreo(usuarioDTO.getCorreo());
+            newUser.setEmail(usuarioDTO.getCorreo());
             newUser.setImage_path(usuarioDTO.getImage_path());
             usuarioService.createUser(newUser);
             // Return a success response

@@ -1,29 +1,37 @@
-package com.example.demo.Usuario;
+package com.example.demo.CapaSeguridad.domain;
 
+import com.example.demo.CapaSeguridad.domain.Role;
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Respuesta.Respuesta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.apache.catalina.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "usuario")
-public class Usuario {
+@Table(name = "_usuario")
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickname;
 
-    private String contraseña;
-
-    private String correo;
+    private String password;
+    @Column(unique = true)
+    private String email;
 
     private String image_path;
 
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @ElementCollection
     @CollectionTable(name = "usuario_animeFavorito", joinColumns = @JoinColumn(name = "usuario_id"))
     @Column(name = "anime_id")
@@ -40,16 +48,35 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Long id, String nickname, String contraseña, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+    public Role getRole() {
+        return role;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Usuario(Long id, String nickname, String contraseña, String correo, String image_path, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
-        this.contraseña = contraseña;
-        this.correo = correo;
+        this.password = contraseña;
+        this.email = correo;
         this.image_path = image_path;
+        this.role = role;
         this.favoriteAnimeIds = favoriteAnimeIds;
         this.hilosCreados = hilosCreados;
         this.respuestasParticipadas = respuestasParticipadas;
     }
+
+
 
     public Long getId() {
         return id;
@@ -67,21 +94,6 @@ public class Usuario {
         this.nickname = nickname;
     }
 
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
 
     public String getImage_path() {
         return image_path;
@@ -113,5 +125,40 @@ public class Usuario {
 
     public void setRespuestasParticipadas(Set<Respuesta> respuestasParticipadas) {
         this.respuestasParticipadas = respuestasParticipadas;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

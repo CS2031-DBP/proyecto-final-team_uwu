@@ -1,8 +1,7 @@
 package com.example.demo.Respuesta;
 
 import com.example.demo.Hilos.Hilo;
-import com.example.demo.Usuario.Usuario;
-import com.example.demo.Usuario.UsuarioController;
+import com.example.demo.CapaSeguridad.domain.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

@@ -3,7 +3,7 @@ package com.example.demo.Respuesta;
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Hilos.HiloRepository;
 import com.example.demo.Usuario.DTO.UsuarioDTO_thread;
-import com.example.demo.Usuario.Usuario;
+import com.example.demo.CapaSeguridad.domain.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
 import com.example.demo.Usuario.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;

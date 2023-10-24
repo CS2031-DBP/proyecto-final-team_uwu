@@ -1,7 +1,7 @@
 package com.example.demo.Hilos;
 
 import com.example.demo.Respuesta.Respuesta;
-import com.example.demo.Usuario.Usuario;
+import com.example.demo.CapaSeguridad.domain.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

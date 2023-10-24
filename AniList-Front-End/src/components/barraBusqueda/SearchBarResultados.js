@@ -7,7 +7,7 @@ export const SearchBarResultados = () => {
 
       <div className='container_portada'>
         <div className='search-bar-container'>
-        <h1 class="titulo">
+        <h1 className="titulo">
           WIKI ANIMU
         </h1>
         </div>  
