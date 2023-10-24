@@ -2,6 +2,7 @@ package com.example.demo.Respuesta;
 
 import com.example.demo.Hilos.Hilo;
 import com.example.demo.Hilos.HiloRepository;
+import com.example.demo.Usuario.DTO.UsuarioDTO_thread;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
 import com.example.demo.Usuario.UsuarioService;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/respuestas")
+@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class RespuestaController {
 
     @Autowired
@@ -36,7 +38,7 @@ public class RespuestaController {
     @GetMapping
     public List<RespuestaDTO> getRespuestas() {
         List<Respuesta> respuestas = respuestaRepository.findAll();
-
+        UsuarioDTO_thread user;
         // Mapea las respuestas a RespuestaDTO
         List<RespuestaDTO> respuestaDTOs = respuestas.stream()
                 .map(respuesta -> new RespuestaDTO(
@@ -47,10 +49,28 @@ public class RespuestaController {
                                 .collect(Collectors.toList())
                 ,respuesta.getHilo().getId(),respuesta.getUsuario().getId()))
                 .collect(Collectors.toList());
-
         return respuestaDTOs;
     }
-
+    @GetMapping("/{messageId}")
+    public RespuestaDTO getRespuesta(@PathVariable Long messageId) {
+        Optional<Respuesta> respuesta = respuestaRepository.findById(messageId);
+        if (respuesta.isPresent()){
+            RespuestaDTO newRespuesta = new RespuestaDTO();
+            newRespuesta.setId(respuesta.get().getId());
+            newRespuesta.setContenido(respuesta.get().getContenido());
+            for(Respuesta respuesta2: respuesta.get().getSubrespuestas()){
+                newRespuesta.getSubRespuestaIds().add(respuesta2.getId());
+            }
+            newRespuesta.setUsuarioid(respuesta.get().getUsuario().getId());
+            newRespuesta.setHiloId(respuesta.get().getHilo().getId());
+            UsuarioDTO_thread user = new UsuarioDTO_thread();
+            user.setNickname(respuesta.get().getUsuario().getNickname());
+            user.setImage_path(respuesta.get().getUsuario().getImage_path());
+            newRespuesta.setUsuarioM(user);
+            return newRespuesta;
+        }
+        return null;
+    }
     @GetMapping("/{userId}/{hiloId}")
     public ResponseEntity<List<RespuestaDTO>> getRespuestasByUserAndHilo(
             @PathVariable Long userId,
@@ -94,34 +114,29 @@ public class RespuestaController {
         return ResponseEntity.badRequest().build();}
     }*/
 
-    @PostMapping("/{hiloId}")
-    public ResponseEntity<Respuesta> createRespuesta(@RequestBody RespuestaDTO respuestaDTO, @PathVariable Long hiloId) {
-        if (respuestaDTO.getUsuarioid() == null) {
-            System.out.println(respuestaDTO.getHiloId());
-            System.out.println(respuestaDTO.getUsuarioid());
-        }
+    @PostMapping("/{idEmisor}/{hiloId}")
+    public ResponseEntity<Respuesta> createRespuesta(@RequestBody RespuestaDTO respuestaDTO, @PathVariable Long hiloId,@PathVariable Long idEmisor) {
+        Optional<Usuario> existUsuario = usuarioRepository.findById(idEmisor);
+        if (existUsuario.isPresent()){
+            Optional<Hilo> existe = hiloRepository.findById(hiloId);
 
-        Optional<Hilo> existe = hiloRepository.findById(hiloId);
+            if (existe.isPresent()) {
+                System.out.println("entrando a condicional");
+                Hilo hilo = existe.get();
 
-        if (existe.isPresent()) {
-            System.out.println("entrando a condicional");
-            Hilo hilo = existe.get();
-
-            // You can fetch the Usuario based on userNickname or userId
-            Usuario usuario = usuarioService.getUserById(respuestaDTO.getUsuarioid());
-            System.out.println(respuestaDTO.getUsuarioid());
-
-            if (usuario != null) {
+                // You can fetch the Usuario based on userNickname or userId
+                Usuario usuario = usuarioService.getUserById(idEmisor);
+                System.out.println(respuestaDTO.getUsuarioid());
                 Respuesta respuesta = new Respuesta();
                 respuesta.setContenido(respuestaDTO.getContenido());
                 respuesta.setHilo(hilo);
                 respuesta.setUsuario(usuario);  // Set the usuario who created the response
-
                 Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
-
                 return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
+
             }
         }
+
 
         return ResponseEntity.badRequest().build();
     }

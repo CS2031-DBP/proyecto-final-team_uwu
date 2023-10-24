@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hilos")
+@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class HiloController {
 
     @Autowired
