@@ -8,6 +8,8 @@ import com.example.demo.Hilos.HiloService;
 import com.example.demo.Respuesta.RespuestaService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.catalina.User;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -139,6 +141,23 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the user");
         }
     }
+   
+    @PatchMapping(path = "/{id}")
+public ResponseEntity<String> patchUser(@PathVariable Long id, @RequestBody RequestDTO usuarioDTO) {
+    Optional<Usuario> optionalUser = usuarioService.getUserByIdOptional(id);
+
+    if (optionalUser.isPresent()) {
+        Usuario user = optionalUser.get();
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        mapper.map(usuarioDTO, user);
+        usuarioService.createUser(user);
+        return ResponseEntity.ok("Usuario actualizado con éxito.");
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+}
+
 
 
 

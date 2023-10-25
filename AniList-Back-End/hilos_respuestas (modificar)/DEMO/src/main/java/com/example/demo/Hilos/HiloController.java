@@ -4,6 +4,9 @@ import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.Usuario.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hilos")
-@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
+//@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class HiloController {
 
     @Autowired
@@ -78,13 +81,13 @@ public class HiloController {
 
 
     // Endpoint para crear un nuevo hilo
-    @PostMapping("/{idUser}")
-    public ResponseEntity<HiloDTO> createHilo(@RequestBody Hilo hilo, @PathVariable Long idUser) {
-        Usuario usuario = usuarioRepository.findById(idUser)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    @PostMapping
+    public ResponseEntity<HiloDTO> createHilo(@RequestBody Hilo hilo) {
+        // Usuario usuario = usuarioRepository.findById(idUser)
+        //         .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        hilo.setUsuario(usuario);
-        hilo.setFechaCreacion(new Date());
+        // hilo.setUsuario(usuario);
+        // hilo.setFechaCreacion(new Date());
         Hilo nuevoHilo = hiloRepository.save(hilo);
 
         // Create HiloDTO with user information
@@ -95,9 +98,25 @@ public class HiloController {
         hiloDTO.setFechaCreacion(nuevoHilo.getFechaCreacion());
 
         // Set user information
-        hiloDTO.setUserId(usuario.getId());
-        hiloDTO.setUserNickname(usuario.getNickname());
+        // hiloDTO.setUserId(usuario.getId());
+        // hiloDTO.setUserNickname(usuario.getNickname());
 
         return new ResponseEntity<>(hiloDTO, HttpStatus.CREATED);
     }
+    @PatchMapping("/{idUser}")
+    public ResponseEntity<String> updatePatch(@RequestBody Hilo hilo, @PathVariable Long idUser) {
+        ModelMapper mapper= new ModelMapper();
+        Optional<Hilo> optionalHilo = hiloRepository.findById(idUser);
+    
+        if (optionalHilo.isPresent()) {
+            Hilo hiloActual = optionalHilo.get();
+            mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            mapper.map(hilo,hiloActual);
+            hiloRepository.save(hiloActual);
+            return ResponseEntity.ok("Hilo actualizado con éxito.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 }

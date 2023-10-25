@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -24,6 +25,10 @@ public class UsuarioService {
     public Usuario getUserById(Long id) {
         return usuarioRepository.findById(id).orElse(null);
     }
+    public Optional<Usuario> getUserByIdOptional(Long id){
+        return usuarioRepository.findById(id);
+    }
+
 
     public List<Long> getFavoriteAnimeIdsByUser(@NotNull Usuario usuario) {
         return new ArrayList<>(usuario.getFavoriteAnimeIds());
