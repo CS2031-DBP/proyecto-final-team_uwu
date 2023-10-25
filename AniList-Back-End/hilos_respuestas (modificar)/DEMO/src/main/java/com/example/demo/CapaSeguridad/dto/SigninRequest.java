@@ -1,5 +1,7 @@
 package com.example.demo.CapaSeguridad.dto;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 public class SigninRequest {
     private String email;
     private String password;

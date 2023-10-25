@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/respuestas")
-@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class RespuestaController {
 
     @Autowired

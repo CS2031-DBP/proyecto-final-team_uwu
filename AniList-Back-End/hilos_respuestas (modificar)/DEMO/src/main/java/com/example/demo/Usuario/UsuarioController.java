@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;

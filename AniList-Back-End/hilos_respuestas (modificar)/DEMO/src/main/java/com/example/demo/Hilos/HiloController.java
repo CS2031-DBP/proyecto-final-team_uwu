@@ -1,27 +1,32 @@
 package com.example.demo.Hilos;
 
+import com.example.demo.CapaSeguridad.domain.Role;
+import com.example.demo.CapaSeguridad.service.JwtService;
 import com.example.demo.Respuesta.Respuesta;
 import com.example.demo.CapaSeguridad.domain.Usuario;
 import com.example.demo.Usuario.UsuarioRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+// JwtService
 @RestController
 @RequestMapping("/hilos")
-@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class HiloController {
-
+    @Autowired
+    private JwtService authService;
     @Autowired
     private HiloRepository hiloRepository;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -49,7 +54,9 @@ public class HiloController {
     }
 
     // Endpoint para obtener todos los hilos como DTOs
-    @GetMapping
+
+    @GetMapping("/all")  // /hilos/all ->  publica para cualquiera
+    @PreAuthorize("isAnonymous()")
     public List<HiloDTO> getHilos() {
         List<Hilo> hilos = hiloRepository.findAll();
         return hilos.stream()

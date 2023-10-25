@@ -2,6 +2,7 @@ package com.example.demo.CapaSeguridad.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 public class SignUpRequest {
 

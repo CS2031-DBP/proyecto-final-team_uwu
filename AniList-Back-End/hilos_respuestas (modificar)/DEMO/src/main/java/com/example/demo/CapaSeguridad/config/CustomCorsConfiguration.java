@@ -12,14 +12,15 @@ import java.util.List;
 public class CustomCorsConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        System.out.println("entrando");
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // Agrega los orígenes permitidos
+        config.setAllowedOrigins(List.of("http://localhost:3000")); // Permite solo http://localhost:3000
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", config); // Permite todos los endpoints
         return source;
     }
 }

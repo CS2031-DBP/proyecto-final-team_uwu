@@ -31,4 +31,8 @@ public class AuthController {
     public ResponseEntity<ResponseDTO>  signin(@RequestBody SigninRequest request) {
         return ResponseEntity.ok(authenticationService.signin(request));
     }
+
+
+
+
 }

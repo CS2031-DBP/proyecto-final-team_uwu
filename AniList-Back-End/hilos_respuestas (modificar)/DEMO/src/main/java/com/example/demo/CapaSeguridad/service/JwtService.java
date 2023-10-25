@@ -1,6 +1,7 @@
 package com.example.demo.CapaSeguridad.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -38,12 +39,14 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
+    // GENERATE TOKEN
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 10000*10 ))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512).compact();
     }
+
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
