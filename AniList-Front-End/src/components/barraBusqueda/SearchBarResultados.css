@@ -1,23 +1,58 @@
-
 .container_portada {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url('../images/portada.png') no-repeat;
+  background: #23252b;
   background-size: cover;
   background-position: center;
   opacity: 0.9;
-  overflow-x:hidden;
+
+  overflow-x: hidden;
 }
-  .search-bar-container{
-    width: 50%;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 200px;
-    margin-top:18px;
-    z-index: 999;
-  }
+
+.container_portada img {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(70%) contrast(120%); /* Aplicar sombreado a la imagen de fondo */
+}
+
+.container_portada::before {
+  z-index: 777;
+  bottom: 0;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4); /* Añadir sombreado a la imagen de fondo */
+}
+
+.container_portada .container_portada_text {
+  position: relative; /* Asegurando que el texto esté por encima de la imagen */
+  padding: 20px;
+  width: 500px;
+  color: #fff;
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agregar sombreado suave al texto */
+}
+
+.search-bar-container {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+  margin-top: 18px;
+  z-index: 999;
+}
+
+

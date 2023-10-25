@@ -3,10 +3,8 @@ import './Result.css'
 import { Link } from 'react-router-dom'
 export const Result = ({result, clearSearch }) => {
   const handleAnimeClick = () => {
-    console.log(clearSearch);
-    clearSearch([]);
-    console.log("click");
-    clearSearch = '';
+    window.location.reload();
+
   }
 
   return (

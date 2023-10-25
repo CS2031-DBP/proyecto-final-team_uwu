@@ -8,16 +8,24 @@ export function useAuth() {
 
 const initialState = {
   isAuthenticated: !!localStorage.getItem('authToken'),
+  id : localStorage.getItem('userId')
 };
 
 function authReducer(state, action) {
   switch (action.type) {
     case 'LOGIN':
       localStorage.setItem('authToken', action.token);
-      return { isAuthenticated: true };
+      console.log("accediendo");
+      console.log(action.id);
+      localStorage.setItem('userId', action.id);
+
+      return { isAuthenticated: true ,
+                id: action.id};
     case 'LOGOUT':
       localStorage.removeItem('authToken');
-      return { isAuthenticated: false };
+      localStorage.removeItem('userId');
+      return { isAuthenticated: false,
+                id: null };
     default:
       return state;
   }

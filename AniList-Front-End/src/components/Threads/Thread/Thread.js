@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom'; // Importa Link de React Router
+import { useParams } from 'react-router-dom'; // Importa Link de React Router
 import axios from 'axios';
 import { Respuestas } from './Respuestas/Respuestas';
 import { Responder } from './Respuestas/Responder';
 
-const Thread = () => {
+const Thread = ({userId}) => {
     const { id } = useParams();
 
     const [hilos, setHilos] = useState({ tema: '', contenido: '', fechaCreacion: '', respuestaIds: [] });
@@ -12,7 +12,7 @@ const Thread = () => {
 
     console.log(id);
     // Realiza una solicitud GET para obtener la lista de hilos desde tu backend
-    axios.get('http://localhost:8080/hilos/'+id)
+    axios.get('http://localhost:8080/api/auth/hilos/'+id)
       .then((response) => {
         setHilos(response.data);
         console.log(response.data);
@@ -21,9 +21,9 @@ const Thread = () => {
         console.error('Error al obtener los hilos:', error);
       });
   }, [id]);
-  const handleRespuestaSubmit = (hiloId, respuesta) => {
+  const handleRespuestaSubmit = (hiloId,respuesta) => {
     // Enviar la respuesta al backend
-    axios.post(`http://localhost:8080/respuestas/${hiloId}`, { contenido: respuesta })
+    axios.post(`http://localhost:8080/api/auth/respuestas/${userId}/${hiloId}`, { contenido: respuesta })
       .then((response) => {
         // Actualizar la vista o realizar cualquier acción necesaria después de enviar la respuesta
         console.log('Respuesta enviada con éxito:', response.data);
@@ -42,8 +42,10 @@ const Thread = () => {
         {hilos.respuestaIds.map((respuestaId) => (
         <Respuestas key={respuestaId} respuestaId={respuestaId} />
       ))}
-
+        {userId && (
         <Responder hiloId={id} onRespuestaSubmit={handleRespuestaSubmit} />
+
+        )}
 
     </div>
   );

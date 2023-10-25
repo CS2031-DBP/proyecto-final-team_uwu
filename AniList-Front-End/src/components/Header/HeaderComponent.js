@@ -12,8 +12,10 @@ export const HeaderComponent = () => {
     const { state, dispatch } = useAuth(); // Obtiene el estado y la función de despacho del contexto
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
+      window.location.reload();
       };
     console.log(state.isAuthenticated);
+    console.log(state.id);
   return (
     <div className='encabezado hider' > 
         <div className='wrap'>

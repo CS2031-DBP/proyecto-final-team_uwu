@@ -18,8 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/respuestas")
-@CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
+@RequestMapping("/api/auth/respuestas")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RespuestaController {
 
     @Autowired
@@ -119,11 +119,9 @@ public class RespuestaController {
         Optional<Usuario> existUsuario = usuarioRepository.findById(idEmisor);
         if (existUsuario.isPresent()){
             Optional<Hilo> existe = hiloRepository.findById(hiloId);
-
             if (existe.isPresent()) {
                 System.out.println("entrando a condicional");
                 Hilo hilo = existe.get();
-
                 // You can fetch the Usuario based on userNickname or userId
                 Usuario usuario = usuarioService.getUserById(idEmisor);
                 System.out.println(respuestaDTO.getUsuarioid());
@@ -133,11 +131,8 @@ public class RespuestaController {
                 respuesta.setUsuario(usuario);  // Set the usuario who created the response
                 Respuesta nuevaRespuesta = respuestaRepository.save(respuesta);
                 return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
-
             }
         }
-
-
         return ResponseEntity.badRequest().build();
     }
 

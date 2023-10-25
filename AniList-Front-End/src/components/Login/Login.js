@@ -31,7 +31,7 @@ export const Login = ({setUserID}) => {
       if (response.status === 200) {
         // Si la respuesta es exitosa (código 200), actualiza el estado de autenticación
         dispatch({ type: 'LOGIN', token: response.token });
-        setUserID(response.data.id);
+        dispatch({ type: 'LOGIN', id: response.data.id });
         navigate('/'); // Reemplaza '/pagina-principal' con la URL correcta
       } else {
         // Manejar otros casos si es necesario

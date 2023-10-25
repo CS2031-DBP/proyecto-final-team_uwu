@@ -10,7 +10,7 @@ export const Responder = ({ hiloId, onRespuestaSubmit }) => {
   const handleRespuestaSubmit = () => {
     // Verifica que la respuesta no esté vacía antes de enviarla al backend
     if (respuesta.trim() !== '') {
-      onRespuestaSubmit(hiloId, respuesta);
+      onRespuestaSubmit(hiloId,respuesta);
       setRespuesta(''); // Limpia el campo de respuesta después de enviar
     }
   };

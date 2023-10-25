@@ -5,6 +5,7 @@
   }
 .ListAnime_Section{
     padding: 0 100px;
+    height: 100%;
 }
 /* Title de cada seccion*/
 .ListAnime_Section .title{
@@ -23,7 +24,6 @@
     max-width: 100%;
     overflow: hidden; 
     scroll-behavior: smooth; 
-    margin-bottom: 60px;
 }
 
 .AnimeActivity{

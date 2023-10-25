@@ -10,13 +10,12 @@ import { AuthProvider } from './components/Autenticacion/AuthContext'; // Import
 import { Register } from './components/Register/Register';
 import Threads from './components/Threads/Threads';
 import Thread from './components/Threads/Thread/Thread';
-import { useState } from 'react';
+import { FooterComponent } from './components/Footer/FooterComponent';
 
 
 function App() {
     // Verifica si el usuario está autenticado (por ejemplo, si existe un token en localStorage)
-    const [idUser, setUserID] = useState('');
-    console.log(idUser);
+    const idUser = localStorage.getItem("userId");
     return (
     <div className="App">
     <BrowserRouter>
@@ -25,12 +24,12 @@ function App() {
         <Routes>
           <Route exact path='/' element={<Index />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
-          <Route path='/Login' element={<Login setUserID={setUserID} />} />
+          <Route path='/Login' element={<Login />} />
           <Route path='/Register' element={<Register />} />
-          <Route path='/Threads' element={<Threads/>}/>
-          <Route path='/Threads/:id' element={<Thread/>}/>
-
+          <Route path='/Threads' element={<Threads userId={idUser} />}/>
+          <Route path='/Threads/:id' element={<Thread userId = {idUser}/>}/>
         </Routes>
+        <FooterComponent/>
       </AuthProvider>
     </BrowserRouter>
   </div>

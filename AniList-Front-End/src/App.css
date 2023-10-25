@@ -8,5 +8,5 @@ body{
   --color-background-200: 237,241,245;
 }
 .Container{
-  background: rgb(var(--color-background-200));
+  background: #23252b;
 }
