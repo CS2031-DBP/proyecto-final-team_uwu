@@ -1,7 +1,7 @@
-package com.example.demo.labels;
+package com.example.demo.Labels.domain;
 
 
-import com.example.demo.Hilos.Hilo;
+import com.example.demo.Hilos.domain.Hilo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 

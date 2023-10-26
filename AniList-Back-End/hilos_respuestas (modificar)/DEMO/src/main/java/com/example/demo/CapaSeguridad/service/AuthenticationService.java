@@ -6,17 +6,14 @@ import com.example.demo.CapaSeguridad.dto.JwtAuthenticationResponse;
 import com.example.demo.CapaSeguridad.dto.SignUpRequest;
 import com.example.demo.CapaSeguridad.dto.SigninRequest;
 import com.example.demo.CapaSeguridad.exception.UserAlreadyExistsException;
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.Usuario.UsuarioRepository;
-import com.example.demo.Usuario.UsuarioService;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Usuario.domain.UsuarioRepository;
+import com.example.demo.Usuario.domain.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AuthenticationService {

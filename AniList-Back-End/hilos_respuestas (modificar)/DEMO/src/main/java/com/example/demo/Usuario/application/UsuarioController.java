@@ -1,12 +1,14 @@
-package com.example.demo.Usuario;
+package com.example.demo.Usuario.application;
 
 
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.Hilos.Hilo;
-import com.example.demo.Hilos.HiloRepository;
-import com.example.demo.Respuesta.Respuesta;
-import com.example.demo.Hilos.HiloService;
-import com.example.demo.Respuesta.RespuestaService;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Hilos.domain.HiloRepository;
+import com.example.demo.Respuesta.domain.Respuesta;
+import com.example.demo.Hilos.domain.HiloService;
+import com.example.demo.Respuesta.domain.RespuestaService;
+import com.example.demo.Usuario.usuarioDTO.UsuarioDTO;
+import com.example.demo.Usuario.domain.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,6 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
-        System.out.println("entrando");
         List<Usuario> usuarios = usuarioService.getUsuarios();
         List<UsuarioDTO> usuarioDTOs = new ArrayList<>();
         for(Usuario usuario : usuarios) {
@@ -125,16 +126,13 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UsuarioDTO usuarioDTO) {
         try {
-            // Convert the UsuarioDTO to a Usuario entity
             Usuario newUser = new Usuario();
             newUser.setNickname(usuarioDTO.getNickname());
             newUser.setEmail(usuarioDTO.getCorreo());
             newUser.setImage_path(usuarioDTO.getImage_path());
             usuarioService.createUser(newUser);
-            // Return a success response
             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } catch (Exception e) {
-            // Handle any errors that may occur during user creation
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the user");
         }
     }

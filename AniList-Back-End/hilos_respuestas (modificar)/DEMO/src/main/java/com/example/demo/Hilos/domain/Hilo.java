@@ -1,8 +1,8 @@
-package com.example.demo.Hilos;
+package com.example.demo.Hilos.domain;
 
-import com.example.demo.Respuesta.Respuesta;
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.labels.Label;
+import com.example.demo.Respuesta.domain.Respuesta;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Labels.domain.Label;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -85,6 +85,7 @@ public class Hilo {
     }
 
     public void setContenido(String contenido) {
+
         this.contenido = contenido;
     }
 

@@ -1,8 +1,11 @@
-package com.example.demo.Hilos;
+package com.example.demo.Hilos.application;
 
-import com.example.demo.Respuesta.Respuesta;
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.Usuario.UsuarioRepository;
+import com.example.demo.Hilos.hilosDTO.HiloDTO;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Hilos.domain.HiloRepository;
+import com.example.demo.Respuesta.domain.Respuesta;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Usuario.domain.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

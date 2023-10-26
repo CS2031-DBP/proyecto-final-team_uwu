@@ -1,4 +1,4 @@
-package com.example.demo.Usuario.DTO;
+package com.example.demo.Usuario.usuarioDTO;
 
 public class UsuarioDTO_thread {
     private String nickname;

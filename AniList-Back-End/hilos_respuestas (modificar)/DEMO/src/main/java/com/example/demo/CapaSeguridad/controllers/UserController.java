@@ -1,7 +1,7 @@
 package com.example.demo.CapaSeguridad.controllers;
 
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.Usuario.UsuarioRepository;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Usuario.domain.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

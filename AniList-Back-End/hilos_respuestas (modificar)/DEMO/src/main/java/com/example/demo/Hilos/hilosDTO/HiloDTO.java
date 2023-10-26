@@ -1,4 +1,4 @@
-package com.example.demo.Hilos;
+package com.example.demo.Hilos.hilosDTO;
 
 import java.util.ArrayList;
 import java.util.Date;

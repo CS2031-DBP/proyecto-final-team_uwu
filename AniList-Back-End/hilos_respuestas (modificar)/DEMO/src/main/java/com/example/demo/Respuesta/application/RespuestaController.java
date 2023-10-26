@@ -1,11 +1,14 @@
-package com.example.demo.Respuesta;
+package com.example.demo.Respuesta.application;
 
-import com.example.demo.Hilos.Hilo;
-import com.example.demo.Hilos.HiloRepository;
-import com.example.demo.Usuario.DTO.UsuarioDTO_thread;
-import com.example.demo.CapaSeguridad.domain.Usuario;
-import com.example.demo.Usuario.UsuarioRepository;
-import com.example.demo.Usuario.UsuarioService;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Hilos.domain.HiloRepository;
+import com.example.demo.Respuesta.respuestaDTO.RespuestaDTO;
+import com.example.demo.Respuesta.domain.Respuesta;
+import com.example.demo.Respuesta.domain.RespuestaRepository;
+import com.example.demo.Usuario.usuarioDTO.UsuarioDTO_thread;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Usuario.domain.UsuarioRepository;
+import com.example.demo.Usuario.domain.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

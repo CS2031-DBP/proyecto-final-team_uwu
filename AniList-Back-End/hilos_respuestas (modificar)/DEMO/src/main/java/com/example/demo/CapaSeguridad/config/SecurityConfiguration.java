@@ -1,6 +1,6 @@
 package com.example.demo.CapaSeguridad.config;
 
-import com.example.demo.Usuario.UsuarioService;
+import com.example.demo.Usuario.domain.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

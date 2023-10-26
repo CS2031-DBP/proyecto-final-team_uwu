@@ -1,7 +1,7 @@
 package com.example.demo.CapaSeguridad.config;
 
 import com.example.demo.CapaSeguridad.service.JwtService;
-import com.example.demo.Usuario.UsuarioService;
+import com.example.demo.Usuario.domain.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

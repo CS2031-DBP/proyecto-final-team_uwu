@@ -1,6 +1,6 @@
-package com.example.demo.Respuesta;
+package com.example.demo.Respuesta.respuestaDTO;
 
-import com.example.demo.Usuario.DTO.UsuarioDTO_thread;
+import com.example.demo.Usuario.usuarioDTO.UsuarioDTO_thread;
 
 import java.util.ArrayList;
 import java.util.List;

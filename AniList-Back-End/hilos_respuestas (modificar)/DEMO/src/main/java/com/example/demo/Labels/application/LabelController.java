@@ -1,5 +1,7 @@
-package com.example.demo.labels;
+package com.example.demo.Labels.application;
 
+import com.example.demo.Labels.domain.Label;
+import com.example.demo.Labels.domain.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

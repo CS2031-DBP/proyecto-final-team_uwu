@@ -1,6 +1,7 @@
-package com.example.demo.Hilos;
+package com.example.demo.Hilos.domain;
 
-import com.example.demo.CapaSeguridad.domain.Usuario;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Usuario.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

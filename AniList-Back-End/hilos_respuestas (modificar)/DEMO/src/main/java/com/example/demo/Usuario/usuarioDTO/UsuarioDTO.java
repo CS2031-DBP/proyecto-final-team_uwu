@@ -1,8 +1,5 @@
-package com.example.demo.Usuario;
+package com.example.demo.Usuario.usuarioDTO;
 
-
-import com.example.demo.Hilos.Hilo;
-import com.example.demo.Respuesta.Respuesta;
 
 import java.util.HashSet;
 import java.util.Set;

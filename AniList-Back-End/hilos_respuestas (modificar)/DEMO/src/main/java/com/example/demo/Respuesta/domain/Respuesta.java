@@ -1,7 +1,7 @@
-package com.example.demo.Respuesta;
+package com.example.demo.Respuesta.domain;
 
-import com.example.demo.Hilos.Hilo;
-import com.example.demo.CapaSeguridad.domain.Usuario;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Usuario.domain.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -21,7 +21,7 @@ public class Respuesta {
     @Column(name = "is_report", nullable = false)
     private boolean isReport;
 
-    @Lob
+
     @Column(nullable = false)
     private String contenido;
 

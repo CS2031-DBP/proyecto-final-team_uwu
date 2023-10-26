@@ -1,11 +1,10 @@
-package com.example.demo.CapaSeguridad.domain;
+package com.example.demo.Usuario.domain;
 
 import com.example.demo.CapaSeguridad.domain.Role;
-import com.example.demo.Hilos.Hilo;
-import com.example.demo.Respuesta.Respuesta;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Respuesta.domain.Respuesta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

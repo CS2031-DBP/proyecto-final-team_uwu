@@ -1,4 +1,4 @@
-package com.example.demo.labels;
+package com.example.demo.Labels.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

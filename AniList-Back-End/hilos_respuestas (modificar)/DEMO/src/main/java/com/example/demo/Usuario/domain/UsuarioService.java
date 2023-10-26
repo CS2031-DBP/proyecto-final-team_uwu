@@ -1,6 +1,7 @@
-package com.example.demo.Usuario;
+package com.example.demo.Usuario.domain;
 
-import com.example.demo.CapaSeguridad.domain.Usuario;
+import com.example.demo.Usuario.domain.Usuario;
+import com.example.demo.Usuario.domain.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
