@@ -1,12 +1,15 @@
 package com.example.demo.Respuesta.respuestaDTO;
 
 import com.example.demo.Usuario.usuarioDTO.UsuarioDTO_thread;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RespuestaDTO {
     private Long id;
+
+    @Size(max = 3000)
     private String contenido;
     private List<Long> subRespuestaIds = new ArrayList<>();
 

@@ -16,6 +16,7 @@ export const Login = ({setUserID}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name);
     setFormData({
       ...formData,
       [name]: value,
@@ -29,12 +30,11 @@ export const Login = ({setUserID}) => {
       const response = await axios.post('http://localhost:8080/api/auth/signin', formData);
 
       if (response.status === 200) {
-        // Si la respuesta es exitosa (código 200), actualiza el estado de autenticación
         dispatch({ type: 'LOGIN', token: response.token });
         dispatch({ type: 'LOGIN', id: response.data.id });
         navigate('/'); // Reemplaza '/pagina-principal' con la URL correcta
       } else {
-        // Manejar otros casos si es necesario
+        // Manejo de excepciones
       }
     } catch (error) {
       // Manejar errores, por ejemplo, mostrar un mensaje de usuario no registrado

@@ -5,6 +5,7 @@ import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Respuesta.domain.Respuesta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +21,8 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Size(max = 50)
     private String nickname;
-
     private String password;
     @Column(unique = true)
     private String email;

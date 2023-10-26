@@ -5,6 +5,7 @@ import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Labels.domain.Label;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,11 +18,11 @@ public class Hilo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Size(max = 300)
     @Column(nullable = false)
     private String tema;
 
-    @Lob
+    @Size(max = 3000)
     @Column(nullable = false)
     private String contenido;
 

@@ -17,9 +17,19 @@ export const Respuestas = ({respuestaId }) => {
           });
       }, [respuestaId]);
   return (
-    <div>
-      <p>Respuesta {message.contenido}</p>
-      <p>Usuario {message.usuarioM.nickname}</p>
+    <div className='comment_wrap'>
+      <div className='grow'>
+        <div className='comment'>
+          <div className='header'>
+            <div className='user'>
+            Usuario : {message.usuarioM.nickname}
+            </div>
+            <div className='markdown'>
+              Contenido : {message.contenido}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>  
     )
 }

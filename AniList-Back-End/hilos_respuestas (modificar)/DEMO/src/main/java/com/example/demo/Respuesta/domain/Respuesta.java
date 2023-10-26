@@ -4,6 +4,7 @@ import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Usuario.domain.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,9 +20,9 @@ public class Respuesta {
     private Long id;
 
     @Column(name = "is_report", nullable = false)
-    private boolean isReport;
+    private Long isReport = 0L;
 
-
+    @Size(max = 3000)
     @Column(nullable = false)
     private String contenido;
 
@@ -58,7 +59,7 @@ public class Respuesta {
     }
 
     // Constructor con parámetros
-    public Respuesta(boolean isReport, String contenido, int cantidadReacciones) {
+    public Respuesta(Long isReport, String contenido, int cantidadReacciones) {
         this.isReport = isReport;
         this.contenido = contenido;
         this.cantidadReacciones = cantidadReacciones;
@@ -73,11 +74,11 @@ public class Respuesta {
         this.id = id;
     }
 
-    public boolean isReport() {
+    public Long isReport() {
         return isReport;
     }
 
-    public void setReport(boolean isReport) {
+    public void setReport(Long isReport) {
         this.isReport = isReport;
     }
 

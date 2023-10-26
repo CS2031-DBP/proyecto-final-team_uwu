@@ -11,6 +11,7 @@ import { Register } from './components/Register/Register';
 import Threads from './components/Threads/Threads';
 import Thread from './components/Threads/Thread/Thread';
 import { FooterComponent } from './components/Footer/FooterComponent';
+import NewThread from './components/Threads/Thread/NewThread';
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
     return (
     <div className="App">
     <BrowserRouter>
-      <AuthProvider> {/* Envuelve la aplicación con el AuthProvider */}
+      <AuthProvider>
         <HeaderComponent />
         <Routes>
           <Route exact path='/' element={<Index />} />
@@ -28,6 +29,8 @@ function App() {
           <Route path='/Register' element={<Register />} />
           <Route path='/Threads' element={<Threads userId={idUser} />}/>
           <Route path='/Threads/:id' element={<Thread userId = {idUser}/>}/>
+          <Route path='/thread/new' element={<NewThread userId = {idUser}/>}/>
+
         </Routes>
         <FooterComponent/>
       </AuthProvider>

@@ -7,7 +7,7 @@ import { Responder } from './Respuestas/Responder';
 const Thread = ({userId}) => {
     const { id } = useParams();
 
-    const [hilos, setHilos] = useState({ tema: '', contenido: '', fechaCreacion: '', respuestaIds: [] });
+    const [hilos, setHilos] = useState({ tema: '', contenido: '', fechaCreacion: '',userNickname: '', respuestaIds: [] });
     useEffect(() => {
 
     console.log(id);
@@ -34,18 +34,56 @@ const Thread = ({userId}) => {
         console.error('Error al enviar la respuesta:', error);
       });
   };
-  return (
-    <div>
-        {hilos.tema}
-        <div>{hilos.contenido}</div>
-        <div>{hilos.fechaCreacion}</div>
-        {hilos.respuestaIds.map((respuestaId) => (
-        <Respuestas key={respuestaId} respuestaId={respuestaId} />
-      ))}
-        {userId && (
-        <Responder hiloId={id} onRespuestaSubmit={handleRespuestaSubmit} />
 
-        )}
+  const calculateTimeAgo = (createdDate) => {
+    const currentDate = new Date();
+    const createdDateObj = new Date(createdDate);
+    const timeDifference = currentDate - createdDateObj;
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const years = Math.floor(days / 365);
+
+    if (years > 0) {
+      return `replied ${years} ${years === 1 ? 'year' : 'years'} ago`;
+    } else if (days > 0) {
+      return `replied ${days} ${days === 1 ? 'day' : 'days'} ago`;
+    } else if (hours > 0) {
+      return `replied ${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+    } else if (minutes > 0) {
+      return `replied ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+    } else {
+      return `replied ${seconds} ${seconds === 1 ? 'second' : 'seconds'} ago`;
+    }
+  };
+  return (
+    <div className='Page_content_forum'>
+      <div className='forum_container'>
+        <h1 className='title'>{hilos.tema}</h1>
+        <div className='body'>
+          <div className='header'>
+            <div className='user'>{hilos.userNickname}</div>
+            <div className='info'>
+              <div className='time'>{calculateTimeAgo(hilos.fechaCreacion)}</div>
+            </div>
+          </div>
+          <div className='markdown'>
+            <p>{hilos.contenido}</p>
+          </div>
+
+
+        </div>
+        <div className='comments'>
+        {hilos.respuestaIds.map((respuestaId) => (
+          <Respuestas key={respuestaId} respuestaId={respuestaId} />
+          ))}
+          {userId && (
+          <Responder hiloId={id} onRespuestaSubmit={handleRespuestaSubmit} />
+          )}
+        </div>
+      </div>
+
 
     </div>
   );

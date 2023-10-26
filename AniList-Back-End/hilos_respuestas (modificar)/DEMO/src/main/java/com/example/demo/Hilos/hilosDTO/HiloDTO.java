@@ -1,12 +1,19 @@
 package com.example.demo.Hilos.hilosDTO;
 
+import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class HiloDTO {
     private Long id;
+
+
+    @Size(max = 300)
     private String tema;
+
+    @Size(max = 3000)
     private String contenido;
     private Date fechaCreacion;
     private List<Long> respuestaIds = new ArrayList<>();

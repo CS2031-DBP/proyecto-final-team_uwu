@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'MiFuentePersonalizada';
+  src: url('/public/fuentes/ToonyLine_PERSONAL_USE_ONLY.otf') format('opentype'), /* Formato recomendado */
+  /* Agrega otros formatos de fuente si los tienes */
+}
+
+
 .container_portada {
   position: relative;
   display: flex;
@@ -8,10 +15,16 @@
   background-size: cover;
   background-position: center;
   opacity: 0.9;
-
   overflow-x: hidden;
 }
-
+.container_portada .title{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'MiFuentePersonalizada', Arial;
+  font-size: 10rem;
+  color: floralwhite;
+}
 .container_portada img {
   z-index: -1;
   position: absolute;
@@ -19,30 +32,22 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  filter: brightness(70%) contrast(120%); /* Aplicar sombreado a la imagen de fondo */
+  object-fit: cover; /* La imagen cubrirá todo el contenedor sin recortarse */
+  filter: brightness(70%) contrast(110%); /* Aplicar sombreado a la imagen de fondo */
 }
 
-.container_portada::before {
-  z-index: 777;
-  bottom: 0;
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.4); /* Añadir sombreado a la imagen de fondo */
-}
 
-.container_portada .container_portada_text {
+
+.container_portada .container_portada_text img {
   position: relative; /* Asegurando que el texto esté por encima de la imagen */
   padding: 20px;
-  width: 500px;
   color: #fff;
   font-size: 2rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agregar sombreado suave al texto */
+  width: 500px;
+  filter: brightness(200%) contrast(2000%); /* Aplicar sombreado a la imagen de fondo */
+
 }
+
 
 .search-bar-container {
   width: 50%;
@@ -54,5 +59,4 @@
   margin-top: 18px;
   z-index: 999;
 }
-
 

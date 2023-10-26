@@ -140,16 +140,22 @@ public class RespuestaController {
     }
 
     // Método PATCH para añadir una subrespuesta a una respuesta existente
-    @PatchMapping("/{respuestaId}")
+    @PatchMapping("/{userId}/{respuestaId}")
     public ResponseEntity<RespuestaDTO> addSubrespuesta(
             @PathVariable Long respuestaId,
+            @PathVariable Long userId,
             @RequestBody Respuesta subrespuesta){
             Respuesta respuesta = respuestaRepository.findById(respuestaId)
                     .orElseThrow(() -> new EntityNotFoundException("No se encontró la respuesta con el ID: " + respuestaId));
+            Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la respuesta con el ID: " + respuestaId));
             // Agrega la subrespuesta a la lista de subrespuestas
-            subrespuesta.setHilo(respuesta.getHilo());  // Asigna el mismo hilo a la subrespuesta
-            subrespuesta.setRespuestaPadre(respuesta);  // Establece la respuesta padre
 
+
+
+        subrespuesta.setHilo(respuesta.getHilo());  // Asigna el mismo hilo a la subrespuesta
+            subrespuesta.setRespuestaPadre(respuesta);  // Establece la respuesta padre
+        subrespuesta.setUsuario(usuario);
             respuesta.getSubrespuestas().add(subrespuesta);
 
             // Guarda la respuesta actualizada

@@ -15,7 +15,7 @@ min-height: 100vh;
 background: url('/public/images/portadas/login_portada.jpg') no-repeat;
 background-size: cover;
 background-position: center;
-
+filter: contrast(120%) brightness(75%);
 }
 
 .Section_login{
