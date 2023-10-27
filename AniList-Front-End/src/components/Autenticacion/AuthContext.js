@@ -19,13 +19,11 @@ function authReducer(state, action) {
       console.log(action.id);
       localStorage.setItem('userId', action.id);
 
-      return { isAuthenticated: true ,
-                id: action.id};
+      return { isAuthenticated: true};
     case 'LOGOUT':
       localStorage.removeItem('authToken');
       localStorage.removeItem('userId');
-      return { isAuthenticated: false,
-                id: null };
+      return { isAuthenticated: false};
     default:
       return state;
   }

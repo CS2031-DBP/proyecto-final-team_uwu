@@ -60,7 +60,7 @@ const Threads = ({ userId }) => {
 
                   <div className='footer'>
                     <div className='name'>
-                    <strong>Usuario:</strong> {hilo.userNickname}
+                    <a href='/'>Usuario:</a> {hilo.userNickname}
                     <p>{calculateTimeAgo(hilo.fechaCreacion)}  </p>
                     </div>
 
