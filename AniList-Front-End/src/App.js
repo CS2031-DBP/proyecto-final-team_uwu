@@ -6,7 +6,6 @@ import { Index } from './components/Index';
 import { Login } from './components/Login/Login';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './components/Autenticacion/AuthContext'; // Importa el AuthProvider
 import { Register } from './components/Register/Register';
 import Threads from './components/Threads/Threads';
 import Thread from './components/Threads/Thread/Thread';
@@ -20,8 +19,7 @@ function App() {
     return (
     <div className="App">
     <BrowserRouter>
-      <AuthProvider>
-        <HeaderComponent />
+        <HeaderComponent userId = {idUser}/>
         <Routes>
           <Route exact path='/' element={<Index />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
@@ -30,10 +28,8 @@ function App() {
           <Route path='/Threads' element={<Threads userId={idUser} />}/>
           <Route path='/Threads/:id' element={<Thread userId = {idUser}/>}/>
           <Route path='/thread/new' element={<NewThread userId = {idUser}/>}/>
-
         </Routes>
         <FooterComponent/>
-      </AuthProvider>
     </BrowserRouter>
   </div>
   );

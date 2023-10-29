@@ -24,9 +24,6 @@
   justify-content: center;
   left: 0;
   top: 0;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   width: 100%;
   z-index: 999;
   }
@@ -91,4 +88,95 @@
   margin-left: 40px;
   font-weight: 400;
   color: #333;
+}
+
+/* PERFIL EDIT*/
+.profile{
+  position: relative;
+  top: 3px
+}
+.profile img{
+  cursor: pointer;
+
+  width: 70px;
+}
+
+
+.sub_menu_wrap {
+  position: absolute;
+  top: 100%;
+  right: 23%;
+  width: 320px;
+  z-index: 1000;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease-in-out, visibility 0s 0.5s; /* Agregamos una transición suave de altura */
+  visibility: hidden;
+}
+
+.sub_menu_wrap.active {
+  visibility: visible;
+  max-height: 400px; /* Ajusta este valor según el tamaño del menú */
+  transition: max-height 0.5s ease-in-out, visibility 0s 0s; /* Transición suave al desplegar */
+}
+
+.sub_menu{
+  background: #fff;
+  padding: 17px;
+  margin: 15px;
+}
+
+.user_info{
+  display: flex;
+  align-items: center;
+}
+.user_info h2{
+    font-weight: 500;
+    margin: 0;
+}
+
+.sub_menu hr{
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: #ccc;
+  margin: 15px 0 10px;
+}
+ion-icon {
+  font-size: 45px;
+  padding: 5px;
+}
+.sub_menu_link{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  color: #525252;
+  margin: 12px 0px;
+}
+
+.sub_menu_link p{
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+ion-icon {
+  background: #e5e5e5;
+  border-radius: 20%;
+  padding: 1px;
+  margin-right: 15px;
+}
+
+.sub_menu_link span{
+  font-size: 25px;
+  transition: transform 0.5s;
+}
+
+.sub_menu_link:hover span{
+  transform: translateX(5px);
+}
+
+.sub_menu_link:hover p{
+  font-weight: 600;
 }

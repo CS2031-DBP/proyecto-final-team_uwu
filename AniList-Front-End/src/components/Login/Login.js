@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../Autenticacion/AuthContext'; // Importa el contexto
 
 import './styles/Login.css';
 
@@ -12,7 +11,6 @@ export const Login = ({setUserID}) => {
   });
 
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,9 +28,9 @@ export const Login = ({setUserID}) => {
       const response = await axios.post('http://localhost:8080/api/auth/signin', formData);
 
       if (response.status === 200) {
-        dispatch({ type: 'LOGIN', token: response.token });
-        dispatch({ type: 'LOGIN', id: response.data.id });
+      localStorage.setItem('userId', response.data.id);
         navigate('/'); // Reemplaza '/pagina-principal' con la URL correcta
+      window.location.reload();
       } else {
         // Manejo de excepciones
       }
