@@ -90,14 +90,12 @@ public class HiloController {
         hilo.setFechaCreacion(new Date());
         Hilo nuevoHilo = hiloRepository.save(hilo);
 
-        // Create HiloDTO with user information
         HiloDTO hiloDTO = new HiloDTO();
         hiloDTO.setId(nuevoHilo.getId());
         hiloDTO.setTema(nuevoHilo.getTema());
         hiloDTO.setContenido(nuevoHilo.getContenido());
         hiloDTO.setFechaCreacion(nuevoHilo.getFechaCreacion());
 
-        // Set user information
         hiloDTO.setUserId(usuario.getId());
         hiloDTO.setUserNickname(usuario.getNickname());
 

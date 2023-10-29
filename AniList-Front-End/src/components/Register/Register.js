@@ -26,11 +26,8 @@ export const Register = () => {
       const response = await axios.post('http://localhost:8080/api/auth/signup', formData);
 
       if (response.status === 200) {
-        // Si la respuesta es exitosa (código 200), redirige a la página principal o a la página de inicio de sesión
-        navigate('/'); // Reemplaza '/pagina-principal' con la URL correcta
-      } else {
-        // Manejar otros casos si es necesario
-      }
+        navigate('/'); 
+      } 
     } catch (error) {
       // Manejar errores, por ejemplo, mostrar un mensaje de error al usuario
       console.error('Error al registrar:', error);
