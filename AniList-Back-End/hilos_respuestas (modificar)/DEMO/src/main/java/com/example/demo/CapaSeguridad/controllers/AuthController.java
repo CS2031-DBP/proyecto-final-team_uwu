@@ -4,9 +4,11 @@ import com.example.demo.CapaSeguridad.domain.ResponseDTO;
 import com.example.demo.CapaSeguridad.dto.JwtAuthenticationResponse;
 import com.example.demo.CapaSeguridad.dto.SignUpRequest;
 import com.example.demo.CapaSeguridad.dto.SigninRequest;
+import com.example.demo.CapaSeguridad.exception.ErrorMessage;
 import com.example.demo.CapaSeguridad.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +31,12 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.signup(request));
     }
     @PostMapping("/signin")
-    public ResponseEntity<ResponseDTO>  signin(@RequestBody SigninRequest request) {
+    public ResponseEntity<ResponseDTO>  signin(@RequestBody @Valid SigninRequest request) {
         return ResponseEntity.ok(authenticationService.signin(request));
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorMessage> handleIllegalArgument(IllegalArgumentException ex) {
+        ErrorMessage error = new ErrorMessage(405,"Duracion no valida");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

@@ -5,15 +5,20 @@ import com.example.demo.CapaSeguridad.domain.Role;
 import com.example.demo.CapaSeguridad.dto.JwtAuthenticationResponse;
 import com.example.demo.CapaSeguridad.dto.SignUpRequest;
 import com.example.demo.CapaSeguridad.dto.SigninRequest;
+import com.example.demo.CapaSeguridad.exception.ErrorMessage;
 import com.example.demo.CapaSeguridad.exception.UserAlreadyExistsException;
 import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Usuario.domain.UsuarioRepository;
 import com.example.demo.Usuario.domain.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 public class AuthenticationService {
@@ -58,15 +63,23 @@ public class AuthenticationService {
     }
 
     public ResponseDTO signin(SigninRequest request) throws IllegalArgumentException {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userRepository.findByEmail(request.getEmail());
-        var jwt = jwtService.generateToken(user);
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            var user = userRepository.findByEmail(request.getEmail());
+            var jwt = jwtService.generateToken(user);
 
-        JwtAuthenticationResponse response = new JwtAuthenticationResponse();
-        response.setToken(jwt);
-        ResponseDTO info = new ResponseDTO();
-        info.setId(user.getId());
-        info.setToken(jwt);
-        return info;
+            JwtAuthenticationResponse response = new JwtAuthenticationResponse();
+            response.setToken(jwt);
+            ResponseDTO info = new ResponseDTO();
+            info.setId(user.getId());
+            info.setNickName(user.getNickname());
+            info.setToken(jwt);
+            return info;
+        } catch (BadCredentialsException e) {
+            throw new IllegalArgumentException("Invalid email or password");
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Bad request");
+        }
     }
+
 }

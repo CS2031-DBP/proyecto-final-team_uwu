@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';
 
 export const Login = ({setUserID}) => {
+  const [error, setError] = useState(null); // Estado para manejar mensajes de error
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,6 +16,7 @@ export const Login = ({setUserID}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError(null);
     console.log(name);
     setFormData({
       ...formData,
@@ -29,13 +32,21 @@ export const Login = ({setUserID}) => {
 
       if (response.status === 200) {
       localStorage.setItem('userId', response.data.id);
-        navigate('/'); // Reemplaza '/pagina-principal' con la URL correcta
-      window.location.reload();
-      } else {
-        // Manejo de excepciones
-      }
+      localStorage.setItem('userName', response.data.nickName);
+        navigate('/'); // Reemplaza /pagina-principal' con la URL correcta
+        window.location.reload();
+      } 
     } catch (error) {
-      // Manejar errores, por ejemplo, mostrar un mensaje de usuario no registrado
+      if (error.message === "Network Error"){
+        setError('An error occurred. Please try again.');
+      }else{
+        if (error.response.data.statusCode === 405){
+          setError('Incorrect email or password. Please try again.');
+  
+        }else{
+          setError('An error occurred. Please try again.');
+        }
+      }
       console.error('Error al iniciar sesión:', error);
     }
   };
@@ -46,6 +57,7 @@ export const Login = ({setUserID}) => {
         <div className='login_header'>
           <h2> Sign In</h2>
         </div>
+        {error && <p className="error-message">{error}</p>} {/* Mostrar mensaje de error si está presente */}
         <form onSubmit={handleSubmit}>
           <div className='inputBox'>
             <input

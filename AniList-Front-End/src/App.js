@@ -16,10 +16,14 @@ import NewThread from './components/Threads/Thread/NewThread';
 function App() {
     // Verifica si el usuario está autenticado (por ejemplo, si existe un token en localStorage)
     const idUser = localStorage.getItem("userId");
+    const idName = localStorage.getItem("userName");
+    console.log(idUser);
+    console.log(idName);
+
     return (
     <div className="App">
     <BrowserRouter>
-        <HeaderComponent userId = {idUser}/>
+        <HeaderComponent userId = {idUser} idName={idName} />
         <Routes>
           <Route exact path='/' element={<Index />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />

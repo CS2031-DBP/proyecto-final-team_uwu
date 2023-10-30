@@ -27,8 +27,11 @@ export const Register = () => {
 
       if (response.status === 200) {
         navigate('/'); 
-      } 
+      }
+      console.log(response.status); 
     } catch (error) {
+      console.log(error.response); // Muestra la respuesta del servidor
+
       // Manejar errores, por ejemplo, mostrar un mensaje de error al usuario
       console.error('Error al registrar:', error);
     }

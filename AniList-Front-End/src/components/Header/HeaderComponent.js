@@ -3,13 +3,13 @@ import '../Header/styles/header.css';
 import { SearchBar } from '../barraBusqueda/SearchBar';
 import { SearchResults } from '../barraBusqueda/SearchResults';
 
-export const HeaderComponent = ({ userId }) => {
+export const HeaderComponent = ({ userId ,idName}) => {
   const [results, setResults] = useState([]);
   const [clearSearch, setClearSearch] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleLogout = () => {
     localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
     window.location.reload();
   };
 
@@ -39,7 +39,7 @@ export const HeaderComponent = ({ userId }) => {
             <div className={`sub_menu_wrap ${isMenuOpen ? 'active' : ''}`} id='subMenu'>
                 <div className='sub_menu'>
                   <div className='user_info'>
-                    <h2>Neververland</h2>
+                    <h2>{idName}</h2>
                   </div>
                   <hr/>
                   <a href="/" className='sub_menu_link'>
