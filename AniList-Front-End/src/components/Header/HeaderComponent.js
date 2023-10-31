@@ -12,7 +12,7 @@ export const HeaderComponent = ({ userId ,idName}) => {
     localStorage.removeItem('userName');
     window.location.reload();
   };
-
+  console.log(idName);
   const toogleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -33,7 +33,7 @@ export const HeaderComponent = ({ userId ,idName}) => {
           <SearchBar setResults={setResults} clearSearch={setClearSearch} />
           <SearchResults results={results} clearSearch={clearSearch} />
         </div>
-        {userId ? (
+        {(userId && idName)? (
           <div className='profile'>
             <img src="images/profile/profile.png" alt="profile" onClick={toogleMenu} />
             <div className={`sub_menu_wrap ${isMenuOpen ? 'active' : ''}`} id='subMenu'>

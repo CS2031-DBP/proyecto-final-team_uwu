@@ -1,46 +1,50 @@
-import React, { useEffect, useState } from 'react';
+
 import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import Slick from 'react-slick';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-export const TrendingNow = () => {
-  const [trendingAnimeData, setTrendingAnimeData] = useState([]);
+export const NextSeason = () => {
+  const [nextSeasonData,setnextSeasonData] = useState([]);
 
   useEffect(() => {
     const apiUrl = 'https://graphql.anilist.co';
     const queryText = `
-      query {
-        Page {
-          media(season: FALL, seasonYear: 2023, type: ANIME, sort: TRENDING_DESC, isAdult: false) {
-            id
-            title {
-              romaji
-            }
-            coverImage {
-              large
-            }
-            averageScore
-            genres
+    query {
+      Page {
+        media(season: WINTER, seasonYear: 2024, type: ANIME, sort: POPULARITY_DESC, isAdult: false) {
+          id
+          title {
+            romaji
           }
+          coverImage {
+            large
+          }
+          averageScore
+          genres
         }
       }
-    `;
-
+    }
+  `;
+    
+    const variables = {};
     const fetchData = async () => {
       try {
         const response = await axios.post(apiUrl, {
           query: queryText,
+          variables: variables,
         });
-
-        setTrendingAnimeData(response.data.data.Page.media);
+    
+        console.log("resultados");
+        console.log(response.data.data.Page.media); // Cambié `response.data.data.Page.media` a `response.data` ya que la respuesta completa se encuentra en `response.data`.
+        setnextSeasonData(response.data.data.Page.media);
       } catch (error) {
         console.error('Error fetching anime data:', error);
       }
-    };
-
-    fetchData();
+    }
+      fetchData();
   }, []);
 
   const settings = {
@@ -52,12 +56,10 @@ export const TrendingNow = () => {
     pauseOnHover:true,
 
   };
-  
-
   return (
     <div className='trending-anime-list'>
       <Slick {...settings}>
-        {trendingAnimeData.map((anime, index) => (
+        {nextSeasonData.map((anime, index) => (
           <div key={index} className='AnimeActivity'>
             <div className='hover-data-right'>
               {anime.title.romaji}
@@ -69,8 +71,8 @@ export const TrendingNow = () => {
                   ) : ''}>
                 </img>
                 <div className='percentage'>
-                  {anime.averageScore!==null?(anime.averageScore + '%'):''}
-                </div>
+              {anime.averageScore!==null?(anime.averageScore + '%'):''}
+              </div>
               </div>
               <div className="genres">
                 {anime.genres.map((genero, genreIndex) => (
@@ -89,4 +91,4 @@ export const TrendingNow = () => {
       </Slick>
     </div>
   );
-};
+}
