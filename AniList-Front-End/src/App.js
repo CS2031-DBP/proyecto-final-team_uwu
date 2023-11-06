@@ -1,6 +1,6 @@
 import './App.css';
 
-import { AnimeDetails } from './components/AnimeDetails';
+import { AnimeDetails } from './components/anime_Details/AnimeDetails';
 import HeaderComponent from './components/Header/HeaderComponent';
 import { Index } from './components/Index';
 import { Login } from './components/Login/Login';
