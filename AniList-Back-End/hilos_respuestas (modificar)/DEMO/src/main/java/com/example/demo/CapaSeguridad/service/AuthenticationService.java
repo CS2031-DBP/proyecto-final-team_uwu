@@ -5,6 +5,8 @@ import com.example.demo.CapaSeguridad.domain.Role;
 import com.example.demo.CapaSeguridad.dto.JwtAuthenticationResponse;
 import com.example.demo.CapaSeguridad.dto.SignUpRequest;
 import com.example.demo.CapaSeguridad.dto.SigninRequest;
+import com.example.demo.CapaSeguridad.exception.EmailAlreadyExitsException;
+import com.example.demo.CapaSeguridad.exception.EmailPasswordException;
 import com.example.demo.CapaSeguridad.exception.ErrorMessage;
 import com.example.demo.CapaSeguridad.exception.UserAlreadyExistsException;
 import com.example.demo.Usuario.domain.Usuario;
@@ -29,21 +31,25 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
-    private final UsuarioService userService;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public AuthenticationService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager,UsuarioService userService) {
+    public AuthenticationService(UsuarioRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UsuarioService userService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
+        this.usuarioService = userService;
     }
 
     public ResponseDTO signup(SignUpRequest request) {
-        if (userService.existsUserByEmail(request.getEmail())) {
-            throw new UserAlreadyExistsException("El correo electrónico ya está registrado.");
+        if (usuarioService.existsUserByEmail(request.getEmail())) {
+            throw new EmailAlreadyExitsException();
         }
+        if (usuarioService.existUserByNickname(request.getNickname())) {
+            throw new UserAlreadyExistsException();
+        }
+
         var user = new Usuario();
         user.setNickname(request.getNickname());
         user.setEmail(request.getEmail());
@@ -62,24 +68,15 @@ public class AuthenticationService {
         return info;
     }
 
-    public ResponseDTO signin(SigninRequest request) throws IllegalArgumentException {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            var user = userRepository.findByEmail(request.getEmail());
-            var jwt = jwtService.generateToken(user);
-
-            JwtAuthenticationResponse response = new JwtAuthenticationResponse();
-            response.setToken(jwt);
-            ResponseDTO info = new ResponseDTO();
-            info.setId(user.getId());
-            info.setNickName(user.getNickname());
-            info.setToken(jwt);
-            return info;
-        } catch (BadCredentialsException e) {
-            throw new IllegalArgumentException("Invalid email or password");
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Bad request");
-        }
+    public ResponseDTO signin(SigninRequest request) {
+        var user = usuarioService.getUserByEmail(request.getEmail());
+        var jwt = jwtService.generateToken(user);
+        JwtAuthenticationResponse response = new JwtAuthenticationResponse();
+        response.setToken(jwt);
+        ResponseDTO info = new ResponseDTO();
+        info.setId(user.getId());
+        info.setToken(jwt);
+        return info;
     }
 
 }

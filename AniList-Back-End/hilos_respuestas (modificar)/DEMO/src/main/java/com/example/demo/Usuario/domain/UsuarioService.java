@@ -1,5 +1,6 @@
 package com.example.demo.Usuario.domain;
 
+import com.example.demo.CapaSeguridad.exception.EmailPasswordException;
 import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Usuario.domain.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,20 @@ public class UsuarioService {
     public boolean existsUserByEmail(String email) {
         return usuarioRepository.findByEmail(email) != null;
     }
+    public boolean existUserByNickname(String nickname){
+        return usuarioRepository.findByNickname(nickname) != null;
+    }
+
+    public Usuario getUserByEmail(String email) {
+        Usuario user = usuarioRepository.findByEmail(email);
+        if(user == null){
+            throw new EmailPasswordException();
+        }
+        else{
+            return user;
+        }
+    }
+
 
     public List<Usuario> getUsuarios(){
         return usuarioRepository.findAll();
@@ -48,6 +63,11 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
     }
+
+    public void createUser(Usuario user) {
+        usuarioRepository.save(user);
+    }
+
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
@@ -56,10 +76,6 @@ public class UsuarioService {
             }
         };
     }
-    public void createUser(Usuario user) {
-        usuarioRepository.save(user);
-    }
-
 
 
 

@@ -3,6 +3,7 @@ package com.example.demo.CapaSeguridad.domain;
 public class ResponseDTO {
     private Long id;
     private String token;
+    private String nickName;
 
     public ResponseDTO(Long id, String token, String nickName) {
         this.id = id;
@@ -10,7 +11,7 @@ public class ResponseDTO {
         this.nickName = nickName;
     }
 
-    private String nickName;
+
 
     public String getNickName() {
         return nickName;
