@@ -29,6 +29,8 @@ public class Usuario implements UserDetails {
 
     private String image_path;
 
+    private String background_picture;
+
     @Enumerated(EnumType.STRING)
     private Role role;
     @ElementCollection
@@ -47,6 +49,19 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
+    public Usuario(Long id, String nickname, String password, String email, String image_path, String background_picture, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+        this.id = id;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.image_path = image_path;
+        this.background_picture = background_picture;
+        this.role = role;
+        this.favoriteAnimeIds = favoriteAnimeIds;
+        this.hilosCreados = hilosCreados;
+        this.respuestasParticipadas = respuestasParticipadas;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -62,20 +77,6 @@ public class Usuario implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    public Usuario(Long id, String nickname, String contraseña, String correo, String image_path, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
-        this.id = id;
-        this.nickname = nickname;
-        this.password = contraseña;
-        this.email = correo;
-        this.image_path = image_path;
-        this.role = role;
-        this.favoriteAnimeIds = favoriteAnimeIds;
-        this.hilosCreados = hilosCreados;
-        this.respuestasParticipadas = respuestasParticipadas;
-    }
-
-
 
     public Long getId() {
         return id;
@@ -126,6 +127,14 @@ public class Usuario implements UserDetails {
         this.respuestasParticipadas = respuestasParticipadas;
     }
 
+    public String getBackground_picture() {
+        return background_picture;
+    }
+
+    public void setBackground_picture(String background_picture) {
+        this.background_picture = background_picture;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -160,4 +169,9 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
 }
