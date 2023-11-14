@@ -1,17 +1,27 @@
 package com.example.demo.Usuario.domain;
 
-import com.example.demo.Usuario.domain.Usuario;
-import com.example.demo.Usuario.domain.UsuarioRepository;
+import com.example.demo.CapaSeguridad.exception.EmailPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -28,6 +38,21 @@ public class UsuarioService {
     public boolean existsUserByEmail(String email) {
         return usuarioRepository.findByEmail(email) != null;
     }
+    public boolean existUserByNickname(String nickname){
+        return usuarioRepository.findByNickname(nickname) != null;
+    }
+
+    public Usuario getUserByEmail(String email) {
+        Usuario user = usuarioRepository.findByEmail(email);
+        System.out.println("ALDAIR CHUPA CHIPI");
+        if(user == null){
+            throw new EmailPasswordException();
+        }
+        else{
+            return user;
+        }
+    }
+
 
     public List<Usuario> getUsuarios(){
         return usuarioRepository.findAll();
@@ -48,6 +73,11 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
     }
+
+    public Usuario createUser(Usuario user) {
+        return usuarioRepository.save(user);
+    }
+
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
@@ -56,12 +86,118 @@ public class UsuarioService {
             }
         };
     }
-    public void createUser(Usuario user) {
-        usuarioRepository.save(user);
+    /*public Usuario uploadProfilePicture(Long userId, MultipartFile file) throws IOException {
+        Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+
+            // Obtén la ruta del directorio del proyecto
+            String projectDirectory = System.getProperty("user.dir");
+
+            // Crea la ruta relativa para la carpeta de imágenes de perfil
+            String relativeFolderPath = "/src/main/resources/profile-pictures/";
+
+            // Combina la ruta del proyecto con la ruta relativa
+            java.nio.file.Path folderPath = Paths.get(projectDirectory, relativeFolderPath);
+
+            // Asegúrate de que el directorio exista, si no, créalo
+            Files.createDirectories(folderPath);
+
+            // Construye el nombre del archivo
+            String fileName = "profile_picture_" + userId + "_" + System.currentTimeMillis() + ".jpg";
+
+            // Combina la ruta del directorio con el nombre del archivo
+            Path filePath = folderPath.resolve(fileName);
+
+            // Guarda el archivo en el sistema de archivos
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Actualiza la entidad de usuario con la ruta del archivo
+            user.setImage_path(filePath.toString());
+
+            // Guarda el usuario actualizado en el repositorio
+            return usuarioRepository.save(user);
+        } else {
+            throw new EntityNotFoundException("User not found");
+        }
+
+    }*/
+
+    public Usuario uploadPicture(Long userId, MultipartFile file, String pictureType) throws IOException {
+        Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            // Obtén la ruta del directorio del proyecto
+            String projectDirectory = System.getProperty("user.dir");
+
+            // Verifica el tipo de imagen (profile o background)
+            String relativeFolderPath;
+            String pictureAttribute;
+            if ("profile".equals(pictureType)) {
+                relativeFolderPath = "/src/main/resources/profile-pictures/";
+                pictureAttribute = "image_path";
+            } else if ("background".equals(pictureType)) {
+                relativeFolderPath = "/src/main/resources/background-pictures/";
+                pictureAttribute = "background_picture";
+            } else {
+                throw new IllegalArgumentException("Invalid pictureType. Use 'profile' or 'background'.");
+            }
+
+            // Combina la ruta del proyecto con la ruta relativa
+            java.nio.file.Path folderPath = Paths.get(projectDirectory, relativeFolderPath);
+
+            // Asegúrate de que el directorio exista, si no, créalo
+            Files.createDirectories(folderPath);
+
+            // Construye el nombre del archivo
+            String fileName = "picture_" + pictureType + "_" + userId + "_" + System.currentTimeMillis() + ".jpg";
+
+            // Combina la ruta del directorio con el nombre del archivo
+            Path filePath = folderPath.resolve(fileName);
+
+            // Guarda el archivo en el sistema de archivos
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Actualiza la entidad de usuario con la ruta del archivo
+            if ("profile".equals(pictureType)) {
+                user.setImage_path(filePath.toString());
+            } else if ("background".equals(pictureType)) {
+                user.setBackground_picture(filePath.toString());
+            }
+
+            // Guarda el usuario actualizado en el repositorio
+            return usuarioRepository.save(user);
+        } else {
+            throw new EntityNotFoundException("User not found");
+        }
     }
+    public ResponseEntity<byte[]> getImage(Long usuarioId, String pictureType) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
 
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+            byte[] imageBytes;
 
+            if ("profile".equals(pictureType)) {
+                imageBytes = usuario.getImage_path().getBytes();
+            } else if ("background".equals(pictureType)) {
+                imageBytes = usuario.getBackground_picture().getBytes();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 

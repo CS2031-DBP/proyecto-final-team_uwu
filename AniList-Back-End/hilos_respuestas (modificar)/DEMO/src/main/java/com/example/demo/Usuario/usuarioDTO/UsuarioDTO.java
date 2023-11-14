@@ -1,6 +1,8 @@
 package com.example.demo.Usuario.usuarioDTO;
 
 
+import jakarta.persistence.Lob;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,20 +13,24 @@ public class UsuarioDTO {
 
     private  String image_path;
 
+    private String background_picture;
+
     private Set<Long> favoriteAnimeIds;
 
     private Set<Long> hilosCreados = new HashSet<>();
 
     private Set<Long> respuestasParticipadas = new HashSet<>();
 
+
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Long id, String nickname, String correo, String image_path, Set<Long> favoriteAnimeIds, Set<Long> hilosCreados, Set<Long> respuestasParticipadas) {
+    public UsuarioDTO(Long id, String nickname, String correo, String image_path, String background_picture, Set<Long> favoriteAnimeIds, Set<Long> hilosCreados, Set<Long> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
         this.correo = correo;
         this.image_path = image_path;
+        this.background_picture = background_picture;
         this.favoriteAnimeIds = favoriteAnimeIds;
         this.hilosCreados = hilosCreados;
         this.respuestasParticipadas = respuestasParticipadas;
@@ -84,5 +90,13 @@ public class UsuarioDTO {
 
     public void setRespuestasParticipadas(Set<Long> respuestasParticipadas) {
         this.respuestasParticipadas = respuestasParticipadas;
+    }
+
+    public String getBackground_picture() {
+        return background_picture;
+    }
+
+    public void setBackground_picture(String background_picture) {
+        this.background_picture = background_picture;
     }
 }

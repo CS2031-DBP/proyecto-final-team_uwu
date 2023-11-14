@@ -34,9 +34,5 @@ public class AuthController {
     public ResponseEntity<ResponseDTO>  signin(@RequestBody @Valid SigninRequest request) {
         return ResponseEntity.ok(authenticationService.signin(request));
     }
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessage> handleIllegalArgument(IllegalArgumentException ex) {
-        ErrorMessage error = new ErrorMessage(405,"Duracion no valida");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
+
 }
