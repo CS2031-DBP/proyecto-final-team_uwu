@@ -19,6 +19,7 @@ const Threads = ({ userId }) => {
         console.error('Error al obtener los hilos:', error);
       });
   }, []);
+  
   const calculateTimeAgo = (createdDate) => {
     const currentDate = new Date();
     const createdDateObj = new Date(createdDate);

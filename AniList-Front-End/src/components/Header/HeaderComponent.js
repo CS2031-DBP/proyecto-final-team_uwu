@@ -2,17 +2,30 @@ import React, { useState } from 'react';
 import '../Header/styles/header.css';
 import { SearchBar } from '../barraBusqueda/SearchBar';
 import { SearchResults } from '../barraBusqueda/SearchResults';
+import { useNavigate } from 'react-router-dom';
 
-export const HeaderComponent = ({ userId ,idName}) => {
+export const HeaderComponent = ({ userId ,idName,idImage}) => {
+  const navigate = useNavigate();
+  
   const [results, setResults] = useState([]);
   const [clearSearch, setClearSearch] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  if (idImage === 'null'){
+    console.log("No hay usuario");
+  }
+
+
+
   const handleLogout = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
+    localStorage.removeItem('userImage');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userBanner');
+    navigate('/');
     window.location.reload();
   };
-  console.log(idName);
   const toogleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -20,10 +33,18 @@ export const HeaderComponent = ({ userId ,idName}) => {
   return (
     <div className='encabezado'>
       <div className='wrap'>
+
         <a className='logo' href='/'>
           <img src={require('../images/emotico.png')} alt="Portada del anime" />
         </a>
         <h1 className="nav__title">A/F</h1>
+        
+        <input type='checkbox' id='check' />
+        <label for='check' className='cheackBoton'>
+        <ion-icon name="menu-outline" id='icon_menu'></ion-icon>
+        </label>
+        <div className='wrap_container' id='wrap_id'>
+
         <div className='links'>
           <a href='/' className='link'>Home</a>
           <a href='/' className='link'>Anime List</a>
@@ -33,21 +54,24 @@ export const HeaderComponent = ({ userId ,idName}) => {
           <SearchBar setResults={setResults} clearSearch={setClearSearch} />
           <SearchResults results={results} clearSearch={clearSearch} />
         </div>
+        
+        </div>
         {(userId && idName)? (
           <div className='profile'>
-            <img src="images/profile/profile.png" alt="profile" onClick={toogleMenu} />
+            <img src={idImage !== 'null' ? 'http://localhost:8080/api/auth/usuarios/'+userId+'/profile_picture': require('../images/profile/profile.png')} 
+            alt="profile" onClick={toogleMenu} />
             <div className={`sub_menu_wrap ${isMenuOpen ? 'active' : ''}`} id='subMenu'>
                 <div className='sub_menu'>
                   <div className='user_info'>
                     <h2>{idName}</h2>
                   </div>
                   <hr/>
-                  <a href="/" className='sub_menu_link'>
+                  <a href={"/user/"+ idName} className='sub_menu_link'>
                     <ion-icon name="person-circle-outline"></ion-icon>
-                    <p>Edit Profile</p>
+                    <p>Profile</p>
                     <span> > </span>
                   </a>
-                  <a href="/" className='sub_menu_link'>
+                  <a href="/settings" className='sub_menu_link'>
                     <ion-icon name="settings-outline"></ion-icon>
                     <p>Settings & Privacy</p>
                     <span> > </span>
@@ -62,7 +86,7 @@ export const HeaderComponent = ({ userId ,idName}) => {
           </div>
         ) : (
           <div className='profile'>
-            <img src="images/profile/profile.png" alt="profile" onClick={toogleMenu} />
+            <img src={require('../images/profile/profile.png')} alt="profile" onClick={toogleMenu} />
             <div className={`sub_menu_wrap ${isMenuOpen ? 'active' : ''}`} id='subMenu'>
                 <div className='sub_menu'>
                   <a href="/Login" className='sub_menu_link'>
@@ -80,6 +104,7 @@ export const HeaderComponent = ({ userId ,idName}) => {
           </div>
         )}
       </div>
+      
     </div>
   );
 };

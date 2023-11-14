@@ -33,13 +33,18 @@ export const Login = ({setUserID}) => {
       if (response.status === 200) {
       localStorage.setItem('userId', response.data.id);
       localStorage.setItem('userName', response.data.nickName);
-        navigate('/'); // Reemplaza /pagina-principal' con la URL correcta
+      localStorage.setItem('userImage', response.data.image_path);
+      localStorage.setItem('userBanner', response.data.background_picture);
+      console.log(response.data);  
+      navigate('/'); // Reemplaza /pagina-principal' con la URL correcta
+        
         window.location.reload();
       } 
     } catch (error) {
       if (error.message === "Network Error"){
         setError('An error occurred. Please try again.');
       }else{
+        console.log(error.response.data);
         if (error.response.data.statusCode === 405){
           setError('Incorrect email or password. Please try again.');
   

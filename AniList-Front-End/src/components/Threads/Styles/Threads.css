@@ -15,18 +15,14 @@
 }
 .Page_content_forum{
     background: #23252b;
-    padding: 40px;
+    padding: 100px;
 }
 
 .forum_container{
     max-width: 1380px;
     margin-top: 40px;
     grid-column-gap: 40px;
-    padding-left: 100px;
-    padding-right: 100px;
     margin: 0 auto;
-    min-width: 320px;
-    width: 100%;
 }
 .feed{
     min-width: 0;
@@ -65,8 +61,13 @@
     padding: 11px 16px;
     text-align: center;
     text-decoration: none;
-
+    transition: .30s;
     width: 200px;
+}
+.create_thread:hover{
+    background: #f47521;
+    scale:1.04;
+    color: #fff;
 }
 
 .forum_container .title{
@@ -74,6 +75,10 @@
     font-size: 2rem;
     margin: 22px 20px;
     margin-top: 35px;
+}
+.forum_container .title:hover{
+    color: #f47521;
+    font-size: 2.01rem;
 }
 .forum_container .body{
     background: rgb(var(--color-foreground));
@@ -131,4 +136,38 @@
     font-size: 1.4rem;
     color: rgb(var(--color-text));
 
+}
+
+/* NEW THREAD*/
+@media (min-width:1540px) {
+    .container{
+        max-width: 1520px;
+        padding-left: 200px;
+        padding-right: 200px;
+    }
+}
+.thread .container{
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+.form .textarea{
+    width: 100%;
+}
+.form .input .textarea__inner {
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 5px 15px;
+    color: rgb(159,173,189);
+    resize: none;
+}
+.form .input{
+    background-color: rgb(21,31,46);
+}
+.form .textarea .textarea__inner{
+    background-color: rgb(21,31,46);
+}
+.body_editor{
+    background-color: rgb(21,31,46);
+    border-radius: 4px;
 }

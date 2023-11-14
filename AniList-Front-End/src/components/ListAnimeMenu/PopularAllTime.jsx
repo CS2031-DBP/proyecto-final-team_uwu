@@ -24,6 +24,7 @@ export const PopularAllTime = () => {
                 averageScore
                 genres
               }
+              
             }
           }
         `;

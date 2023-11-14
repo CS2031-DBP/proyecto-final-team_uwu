@@ -6,7 +6,7 @@ export const SearchBarResultados = () => {
   return (
 
       <div className='container_portada'>
-        <img src='images/portadas/portada.png' alt='miku2'/>
+        <img src={'images/portadas/portada.png'} alt='miku2'/>
 
         <div className='title'>
           <div>

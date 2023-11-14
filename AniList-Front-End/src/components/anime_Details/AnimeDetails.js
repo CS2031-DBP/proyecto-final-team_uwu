@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import './AnimeDetails.css'; // Importa el archivo CSS
 
 export const AnimeDetails = () => {
   const { id } = useParams();
@@ -19,7 +20,15 @@ export const AnimeDetails = () => {
             coverImage {
               large
             }
+            bannerImage 
+            trailer {
+              id
+              site
+              thumbnail
+            }
+            
           }
+          
         }
       `;
 
@@ -34,6 +43,11 @@ export const AnimeDetails = () => {
         });
 
         const animeData = response.data.data.Media;
+        if (animeData.bannerImage === null) {
+          const randomBanner =require('../images/banner_null.jpg');
+      animeData.bannerImage = randomBanner;
+
+        }
         if (animeData.description !== null){
           animeData.description = cleanDescription(animeData.description);
         }
@@ -49,22 +63,52 @@ export const AnimeDetails = () => {
     fetchAnimeDetails();
 
   }, [id]);
+
   return (
-    <div>
-      <h1>Detalles del Anime</h1>
-      {animeDetails ? (
-        <>
-          <h2>Nombre del Anime (romaji): {animeDetails.title.romaji}</h2>
-          <p>Descripción: {animeDetails.description}</p>
-          <img src={animeDetails.coverImage.large} alt={animeDetails.title.romaji} />
-        </>
-      ) : (
-        <div>Cargando...</div>
-      )}
-    </div>
+    <div className="ban">
+    {animeDetails && animeDetails.coverImage && (
+      <div className="content-wrapper">
+        <div className='bannerA' style={{ backgroundImage: `url(${animeDetails.bannerImage})` }}>
+          <div className='shadow'></div>
+        </div>
+        <div className="anime-details">
+          <div className='container_Details'>
+            <div className='cover_wrap_image'>
+            <div className="anime-botton">
+                <img src={animeDetails.coverImage.large} alt={animeDetails.title.romaji} className='ImagenAnime' />
+                <div className='Addfavorite'>ADD TO FAVORITE</div>
+            </div>
+            </div>
+            <div className="anime-info">
+              <h2 className='title'>{animeDetails.title.romaji}</h2>
+              <div className='description_container'>
+              <p className='description'>Descripción: {animeDetails.description}</p>
+                
+              </div>
+              {animeDetails.trailer && (
+                <div className="trailer">
+                  <p>Tráiler:</p>
+                  <iframe
+                    title="Tráiler"
+                    src={`https://www.youtube.com/embed/${animeDetails.trailer.id}`}
+                    allowFullScreen
+      
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    )}
+  </div>
   );
+  
 };
 // Funcion para eliminar etiquetas de HTML
+
+
 function cleanDescription(description) {
   // Eliminar etiquetas HTML
   const cleanText = description.replace(/<[^>]+>/g, '');

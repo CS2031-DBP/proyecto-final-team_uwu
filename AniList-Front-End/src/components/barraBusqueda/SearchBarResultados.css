@@ -25,6 +25,7 @@
   font-size: 10rem;
   color: floralwhite;
 }
+
 .container_portada img {
   z-index: -1;
   position: absolute;
@@ -48,7 +49,36 @@
 
 }
 
+@media (max-width:1000px){
+  .container_portada .title{
+    font-size: 8rem;
+  }
+  .container_portada .container_portada_text img{
+    width: 300px;
+  }
 
+}
+@media (max-width:650px){
+  .container_portada .title{
+    font-size: 7rem;
+  }
+  .container_portada .container_portada_text img{
+    width: 250px;
+  }
+
+}
+@media (max-width:600px){
+  .container_portada img{
+    
+  }
+  .container_portada .title{
+    font-size: 5rem;
+  }
+  .container_portada .container_portada_text img{
+    width: 200px;
+  }
+
+}
 .search-bar-container {
   width: 50%;
   margin: auto;
