@@ -82,44 +82,6 @@ public class UsuarioService {
             }
         };
     }
-    /*public Usuario uploadProfilePicture(Long userId, MultipartFile file) throws IOException {
-        Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
-
-        if (optionalUser.isPresent()) {
-            Usuario user = optionalUser.get();
-
-
-            // Obtén la ruta del directorio del proyecto
-            String projectDirectory = System.getProperty("user.dir");
-
-            // Crea la ruta relativa para la carpeta de imágenes de perfil
-            String relativeFolderPath = "/src/main/resources/profile-pictures/";
-
-            // Combina la ruta del proyecto con la ruta relativa
-            java.nio.file.Path folderPath = Paths.get(projectDirectory, relativeFolderPath);
-
-            // Asegúrate de que el directorio exista, si no, créalo
-            Files.createDirectories(folderPath);
-
-            // Construye el nombre del archivo
-            String fileName = "profile_picture_" + userId + "_" + System.currentTimeMillis() + ".jpg";
-
-            // Combina la ruta del directorio con el nombre del archivo
-            Path filePath = folderPath.resolve(fileName);
-
-            // Guarda el archivo en el sistema de archivos
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            // Actualiza la entidad de usuario con la ruta del archivo
-            user.setImage_path(filePath.toString());
-
-            // Guarda el usuario actualizado en el repositorio
-            return usuarioRepository.save(user);
-        } else {
-            throw new EntityNotFoundException("User not found");
-        }
-
-    }*/
 
     public Usuario uploadPicture(Long userId, MultipartFile file, String pictureType) throws IOException {
         Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
@@ -149,6 +111,9 @@ public class UsuarioService {
             // Asegúrate de que el directorio exista, si no, créalo
             Files.createDirectories(folderPath);
 
+            // Elimina imágenes antiguas asociadas al usuario
+            eliminarImagenesAntiguas(user, pictureType, folderPath);
+
             // Construye el nombre del archivo
             String fileName = "picture_" + pictureType + "_" + userId + "_" + System.currentTimeMillis() + ".jpg";
 
@@ -172,7 +137,60 @@ public class UsuarioService {
         }
     }
 
+    /*public Usuario uploadPicture(Long userId, MultipartFile file, String pictureType) throws IOException {
+        Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
 
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            // Verifica el tipo de imagen (profile o background)
+            String relativeFolderPath;
+            String pictureAttribute;
+            if ("profile".equals(pictureType)) {
+                relativeFolderPath = "profile-pictures/";
+                pictureAttribute = "image_path";
+            } else if ("background".equals(pictureType)) {
+                relativeFolderPath = "background-pictures/";
+                pictureAttribute = "background_picture";
+            } else {
+                throw new IllegalArgumentException("Invalid pictureType. Use 'profile' or 'background'.");
+            }
+
+            // Combina la ruta relativa con el nombre del archivo
+            String fileName = "picture_" + pictureType + "_" + userId + "_" + System.currentTimeMillis() + ".jpg";
+
+            // Guarda el archivo en el sistema de archivos
+            String filePath = relativeFolderPath + fileName;
+
+            // Actualiza la entidad de usuario con la ruta del archivo
+            if ("profile".equals(pictureType)) {
+                user.setImage_path(filePath);
+            } else if ("background".equals(pictureType)) {
+                user.setBackground_picture(filePath);
+            }
+
+            // Guarda el usuario actualizado en el repositorio
+            return usuarioRepository.save(user);
+        } else {
+            throw new EntityNotFoundException("User not found");
+        }
+    }*/
+
+    public void eliminarImagenesAntiguas(Usuario usuario, String pictureType, Path folderPath) throws IOException {
+        // Elimina imágenes antiguas
+        if ("profile".equals(pictureType)) {
+            eliminarImagenAntigua(usuario.getImage_path(), folderPath);
+        } else if ("background".equals(pictureType)) {
+            eliminarImagenAntigua(usuario.getBackground_picture(), folderPath);
+        }
+    }
+
+    public void eliminarImagenAntigua(String imagePath, Path folderPath) throws IOException {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            Path oldFilePath = folderPath.resolve(Paths.get(imagePath).getFileName());
+            Files.deleteIfExists(oldFilePath);
+        }
+    }
 
 
 

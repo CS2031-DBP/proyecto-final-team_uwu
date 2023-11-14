@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/labels")
+@RequestMapping("/api/auth/labels")
 public class LabelController {
     @Autowired
     private LabelRepository labelRepository;

@@ -24,12 +24,12 @@ public class Label{
     public Label() {
     }
 
-    public Label(String valor,List<Hilo> hilos) {
+    public Label(Long id, String valor, List<Hilo> hilos) {
+        this.id = id;
         this.valor = valor;
         this.hilos = hilos;
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -38,15 +38,21 @@ public class Label{
         this.id = id;
     }
 
-    public String getvalor() {
-        return this.valor;
+    public String getValor() {
+        return valor;
     }
 
-    public void setvalor(String valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
-    public List<Hilo> getHilos(){return this.hilos;}
-    public void setHilos(List<Hilo>hilos){this.hilos=hilos;}
+
+    public List<Hilo> getHilos() {
+        return hilos;
+    }
+
+    public void setHilos(List<Hilo> hilos) {
+        this.hilos = hilos;
+    }
 }
 
 
