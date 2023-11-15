@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/usuarios")
+@RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:3000") // Reemplaza con la URL de tu frontend
 public class UsuarioController {
     @Autowired
@@ -151,51 +151,6 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the user");
         }
     }
-
-    /*@PostMapping("/{userId}/upload-profile-picture")
-    public ResponseEntity<String> uploadProfilePicture(
-            @PathVariable("userId") Long userId,
-            @RequestParam("file") MultipartFile file) {
-        try {
-            usuarioService.uploadProfilePicture(userId, file);
-            return ResponseEntity.ok("Profile picture uploaded successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading profile picture");
-        }
-    }*/
-
-
-
-    /*@PostMapping("/{usuario_id}/upload_image")
-    public ResponseEntity<Usuario> uploadImage(@PathVariable("usuario_id") Long usuarioId, @RequestParam("image") MultipartFile file) {
-        try {
-            // Obtener el usuario existente por ID
-            Usuario usuario = usuarioService.getUserById(usuarioId);
-
-            // Verificar si el usuario existe
-            if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            // Guardar la imagen en el sistema de archivos
-            String originalFilename = file.getOriginalFilename();
-            System.out.println(originalFilename);
-            Path fileNameAndPath = Paths.get("src/main/recursos/static", originalFilename);
-            Files.write(fileNameAndPath, file.getBytes());
-            // Actualizar la ruta de la imagen en el usuario
-            usuario.setImage_path(originalFilename);
-
-            // Guardar el usuario actualizado
-            Usuario usuarioGuardado = usuarioService.createUser(usuario);
-
-            return ResponseEntity.ok(usuarioGuardado);
-        } catch (IOException e) {
-            // Manejar la excepción de manera adecuada (puedes lanzar una excepción personalizada o devolver un ResponseEntity con un código de error)
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }*/
 
     @PostMapping("/{usuarioId}/upload-picture")
     public ResponseEntity<Usuario> uploadPicture(

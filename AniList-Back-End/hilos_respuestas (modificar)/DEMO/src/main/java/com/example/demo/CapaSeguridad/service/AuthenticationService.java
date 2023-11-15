@@ -69,11 +69,8 @@ public class AuthenticationService {
     }
 
     public ResponseDTO signin(SigninRequest request) {
-        System.out.println("aldair chipi");
         var user = usuarioService.getUserByEmail(request.getEmail());
-        System.out.println("aldair chipi2");
         var jwt = jwtService.generateToken(user);
-        System.out.println("aldair chipi3");
         JwtAuthenticationResponse response = new JwtAuthenticationResponse();
         response.setToken(jwt);
         ResponseDTO info = new ResponseDTO();

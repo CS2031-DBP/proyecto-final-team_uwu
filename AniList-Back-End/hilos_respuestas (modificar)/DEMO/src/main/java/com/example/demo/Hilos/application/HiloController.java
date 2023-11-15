@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/auth/hilos")
+@RequestMapping("/hilos")
 @CrossOrigin(origins = "http://localhost:3000")
 public class HiloController {
 

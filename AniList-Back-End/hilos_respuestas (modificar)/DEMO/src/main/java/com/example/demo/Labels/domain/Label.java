@@ -4,12 +4,14 @@ package com.example.demo.Labels.domain;
 import com.example.demo.Hilos.domain.Hilo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.UUID;
 
 import java.util.List;
 
 @Entity
 @Table(name = "label")
 public class Label{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
