@@ -1,5 +1,6 @@
 package com.example.demo.Labels.application;
 
+import com.example.demo.CapaSeguridad.exception.ItemNotFoundException;
 import com.example.demo.Labels.domain.Label;
 import com.example.demo.Labels.domain.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +11,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/labels")
+@RequestMapping("/labels")
 public class LabelController {
     @Autowired
     private LabelRepository labelRepository;
 
     @GetMapping
-    public List<Label> getHilos() {
-        List<Label> label = labelRepository.findAll();
-        return label;
+    public ResponseEntity<List<Label>> obtenerTodasLasEtiquetas() {
+        List<Label> etiquetas = labelRepository.findAll();
+
+        if (etiquetas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(etiquetas);
     }
 
-    @PostMapping
-    public ResponseEntity<Label> createHilo(@RequestBody Label label) {
-        Label nuevoHilo=labelRepository.save(label);
-        return new ResponseEntity<>(nuevoHilo, HttpStatus.CREATED);
+    @GetMapping("/{valor}")
+    public ResponseEntity<Label> obtenerEtiquetaPorValor(@PathVariable("valor") String valor) {
+        Label etiqueta = labelRepository.findByValor(valor);
+
+        if (etiqueta == null) {
+            throw new ItemNotFoundException();
+        }
+
+        return ResponseEntity.ok(etiqueta);
     }
+
+    @DeleteMapping("/{valor}")
+    public ResponseEntity<String> borrarEtiquetaPorValor(@PathVariable("valor") String valor) {
+        Label etiqueta = labelRepository.findByValor(valor);
+
+        if (etiqueta == null) {
+            throw new ItemNotFoundException();
+        }
+
+        labelRepository.delete(etiqueta);
+        return ResponseEntity.ok("Etiqueta eliminada con éxito");
+    }
+
+
+
+
 }
 

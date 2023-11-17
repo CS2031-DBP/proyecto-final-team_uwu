@@ -46,7 +46,7 @@ public class Hilo {
     @JoinTable(name = "hilo_label",
             joinColumns = @JoinColumn(name = "hilo_id"),
             inverseJoinColumns = @JoinColumn(name = "label_id"))
-    private List<Label> labels;
+    private List<Label> labels = new ArrayList<>();
 
 
     public Hilo() {

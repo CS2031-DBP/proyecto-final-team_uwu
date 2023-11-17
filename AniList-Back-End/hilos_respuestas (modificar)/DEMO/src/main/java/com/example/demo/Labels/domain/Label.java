@@ -19,17 +19,12 @@ public class Label{
     @Column(nullable = false)
     private String valor;
 
-    @ManyToMany(mappedBy = "labels")
-    @JsonIgnoreProperties("labels")
-    private List<Hilo> hilos;
-
     public Label() {
     }
 
-    public Label(Long id, String valor, List<Hilo> hilos) {
+    public Label(Long id, String valor) {
         this.id = id;
         this.valor = valor;
-        this.hilos = hilos;
     }
 
     public Long getId() {
@@ -48,13 +43,6 @@ public class Label{
         this.valor = valor;
     }
 
-    public List<Hilo> getHilos() {
-        return hilos;
-    }
-
-    public void setHilos(List<Hilo> hilos) {
-        this.hilos = hilos;
-    }
 }
 
 

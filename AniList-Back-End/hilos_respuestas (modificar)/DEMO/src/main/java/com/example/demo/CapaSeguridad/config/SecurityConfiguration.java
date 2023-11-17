@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                 new AntPathRequestMatcher("/usuarios/**"),
                 new AntPathRequestMatcher("/api/**"),
                 new AntPathRequestMatcher("/hilos/**"),
-                new AntPathRequestMatcher("/respuestas/**")
+                new AntPathRequestMatcher("/respuestas/**"),
+                new AntPathRequestMatcher("/labels/**")
         );
     }
 

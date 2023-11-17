@@ -23,4 +23,9 @@ public class RestExceptionHandler {
         ErrorMessage error = new ErrorMessage(400,"Incorrect Email or Password");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+    @ExceptionHandler(ItemNotFoundException.class)
+    protected ResponseEntity<ErrorMessage> itemNoEncontrado(){
+        ErrorMessage error = new ErrorMessage(404,"Item no encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
