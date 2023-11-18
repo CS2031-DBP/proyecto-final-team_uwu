@@ -42,6 +42,7 @@ public class HiloController {
         dto.setTema(hilo.getTema());
         dto.setContenido(hilo.getContenido());
         dto.setFechaCreacion(hilo.getFechaCreacion());
+        dto.setCantidadReaccciones(hilo.getCantidadReaccciones());
 
         if (hilo.getUsuario() != null) {
             dto.setUserId(hilo.getUsuario().getId());
@@ -76,28 +77,6 @@ public class HiloController {
                 .collect(Collectors.toList());
     }
 
-
-    /*@GetMapping("/{hiloId}")
-    public ResponseEntity<HiloDTO> getHilobyId(@PathVariable Long hiloId){
-        Optional<Hilo> Hexiste = hiloRepository.findById(hiloId);
-        if (Hexiste.isPresent()){
-            HiloDTO newHilo = new HiloDTO();
-            newHilo.setId(Hexiste.get().getId());
-            newHilo.setTema(Hexiste.get().getTema());
-            newHilo.setContenido(Hexiste.get().getContenido());
-            newHilo.setUserId(Hexiste.get().getUsuario().getId());
-            newHilo.setUserNickname(Hexiste.get().getUsuario().getNickname());
-            newHilo.setFechaCreacion(Hexiste.get().getFechaCreacion());
-            for(Respuesta respuesta: Hexiste.get().getRespuestas()){
-                newHilo.getRespuestaIds().add(respuesta.getId());
-            }
-            return ResponseEntity.ok(newHilo);
-        }
-
-        return new ResponseEntity<>(new HiloDTO(),HttpStatus.BAD_REQUEST);
-    }*/
-
-
     @GetMapping("/{hiloId}")
     public ResponseEntity<?> getHilobyId(@PathVariable Long hiloId) {
         Optional<Hilo> optionalHilo = hiloRepository.findById(hiloId);
@@ -108,10 +87,13 @@ public class HiloController {
             newHilo.setId(hilo.getId());
             newHilo.setTema(hilo.getTema());
             newHilo.setContenido(hilo.getContenido());
+            newHilo.setCantidadReaccciones(hilo.getCantidadReaccciones());
             if (hilo.getUsuario() != null) {
                 newHilo.setUserId(hilo.getUsuario().getId());
                 newHilo.setUserNickname(hilo.getUsuario().getNickname());
-                newHilo.setImage_path(hilo.getUsuario().getImage_path());
+                if(hilo.getUsuario().getImage_path() != null){
+                    newHilo.setImage_path("http://localhost:8080/usuarios/" + hilo.getUsuario().getId() + "/profile_picture");
+                }
 
             }
             newHilo.setFechaCreacion(hilo.getFechaCreacion());
@@ -133,7 +115,7 @@ public class HiloController {
         hilo.setUsuario(usuario);
         hilo.setTema(hiloDTO.getTema());
         hilo.setContenido(hiloDTO.getContenido());
-        hilo.setFechaCreacion(new Date());
+        hilo.setFechaCreacion(hiloDTO.getFechaCreacion());
 
         List<String> etiquetasAsociadas = hiloDTO.getLabelValores();
 
@@ -197,10 +179,9 @@ public class HiloController {
         Hilo hilo = hiloRepository.findById(hiloId)
                 .orElseThrow(() -> new EntityNotFoundException("Hilo not found"));
 
-        // Actualizar los campos del hilo con los valores proporcionados en el DTO
+        // Actualiza los campos del hilo con los valores proporcionados en el DTO
         hilo.setTema(hiloDTO.getTema());
         hilo.setContenido(hiloDTO.getContenido());
-        hilo.setFechaCreacion(hiloDTO.getFechaCreacion());
 
         // Obtener los valores de las etiquetas desde el DTO
         List<String> etiquetasAsociadas = hiloDTO.getLabelValores();
@@ -231,14 +212,15 @@ public class HiloController {
         updatedHiloDTO.setTema(updatedHilo.getTema());
         updatedHiloDTO.setContenido(updatedHilo.getContenido());
         updatedHiloDTO.setFechaCreacion(updatedHilo.getFechaCreacion());
+        updatedHiloDTO.setCantidadReaccciones(updatedHilo.getCantidadReaccciones());
         updatedHiloDTO.setUserId(updatedHilo.getUsuario().getId());
         updatedHiloDTO.setUserNickname(updatedHilo.getUsuario().getNickname());
-        updatedHiloDTO.setImage_path(updatedHilo.getUsuario().getImage_path());
+        if(updatedHilo.getUsuario().getImage_path() != null){
+            updatedHiloDTO.setImage_path("http://localhost:8080/usuarios/" + updatedHilo.getUsuario().getId() + "/profile_picture");
+        }
         updatedHiloDTO.setLabelValores(etiquetasAsociadas);
 
         return ResponseEntity.ok(updatedHiloDTO);
     }
-
-    //PATCH PARA HILOS(ACTUALIZAR TEMA,CONTENIDO,FECHA,LABELS)
 
 }

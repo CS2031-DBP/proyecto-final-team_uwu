@@ -6,7 +6,10 @@ import com.example.demo.Labels.domain.Label;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -148,6 +151,21 @@ public class Hilo {
         labels.remove(label);
         label.getHilos().remove(this); // Eliminar la relación inversa
     }
+    @PrePersist
+    protected void onCreate() {
+        fechaCreacion = convertirFechaHoraATimeZonePeru(ZonedDateTime.now());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fechaCreacion = convertirFechaHoraATimeZonePeru(ZonedDateTime.now());
+    }
+
+    private Date convertirFechaHoraATimeZonePeru(ZonedDateTime fechaHoraUTC) {
+        ZonedDateTime fechaHoraPeru = fechaHoraUTC.withZoneSameInstant(ZoneId.of("America/Lima"));
+        return Date.from(fechaHoraPeru.toInstant());
+    }
+
 
 
 }
