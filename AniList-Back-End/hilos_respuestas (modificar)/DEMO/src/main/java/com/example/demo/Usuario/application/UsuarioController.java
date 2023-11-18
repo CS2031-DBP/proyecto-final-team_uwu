@@ -56,8 +56,12 @@ public class UsuarioController {
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
             usuarioDTO.setCorreo(usuario.getUsername());
-            usuarioDTO.setImage_path(usuario.getImage_path());
-            usuarioDTO.setBackground_picture(usuario.getBackground_picture());
+            if(usuario.getImage_path() != null){
+                usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
+            }
+            if(usuario.getBackground_picture() != null){
+                usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
+            }
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
             for(Hilo hilos: usuario.getHilosCreados()){
                 usuarioDTO.getHilosCreados().add(hilos.getId());
@@ -124,6 +128,7 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
@@ -196,6 +201,34 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/{usuario_id}/banner_picture")
+    public ResponseEntity<byte[]> getBanner_Picture(@PathVariable("usuario_id") Long usuarioId) {
+        try {
+            // Obtener el usuario por ID
+            Usuario usuario = usuarioService.getUserById(usuarioId);
+
+            if (usuario == null || usuario.getImage_path() == null) {
+                // Manejar el caso en que el usuario o la imagen no existan
+                return ResponseEntity.notFound().build();
+            }
+
+            // Leer la imagen como un array de bytes
+            Path imagePath = Paths.get(usuario.getBackground_picture());
+            byte[] imageBytes = Files.readAllBytes(imagePath);
+
+            // Construir la respuesta con el contenido de la imagen y los encabezados adecuados
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG); // Ajusta el tipo de contenido según el formato de tus imágenes
+
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            // Manejar la excepción de manera adecuada
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+//FALTA IMPLEMENTAR UN PATCH PARA ACTUALIZAR SU INFO
 
 
 

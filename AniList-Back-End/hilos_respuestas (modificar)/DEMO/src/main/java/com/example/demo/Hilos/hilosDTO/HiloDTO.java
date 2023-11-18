@@ -1,5 +1,7 @@
 package com.example.demo.Hilos.hilosDTO;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
@@ -15,15 +17,23 @@ public class HiloDTO {
 
     @Size(max = 3000)
     private String contenido;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     private List<Long> respuestaIds = new ArrayList<>();
     private Long userId;
     private String userNickname;
+    private String image_path;
+
+    private List<String> labelValores = new ArrayList<>();
+
+
+
+
 
     public HiloDTO() {
     }
 
-    public HiloDTO(Long id, String tema, String contenido, Date fechaCreacion, List<Long> respuestaIds, Long userId, String userNickname) {
+    public HiloDTO(Long id, String tema, String contenido, Date fechaCreacion, List<Long> respuestaIds, Long userId, String userNickname, String image_path, List<String> labelValores) {
         this.id = id;
         this.tema = tema;
         this.contenido = contenido;
@@ -31,6 +41,8 @@ public class HiloDTO {
         this.respuestaIds = respuestaIds;
         this.userId = userId;
         this.userNickname = userNickname;
+        this.image_path = image_path;
+        this.labelValores = labelValores;
     }
 
     // Getters y setters
@@ -88,5 +100,21 @@ public class HiloDTO {
 
     public void setUserNickname(String userNickname) {
         this.userNickname = userNickname;
+    }
+
+    public List<String> getLabelValores() {
+        return labelValores;
+    }
+
+    public void setLabelValores(List<String> labelValores) {
+        this.labelValores = labelValores;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
     }
 }

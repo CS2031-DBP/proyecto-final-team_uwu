@@ -1,6 +1,8 @@
 package com.example.demo.Labels.application;
 
 import com.example.demo.CapaSeguridad.exception.ItemNotFoundException;
+import com.example.demo.Hilos.domain.Hilo;
+import com.example.demo.Hilos.domain.HiloRepository;
 import com.example.demo.Labels.domain.Label;
 import com.example.demo.Labels.domain.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import java.util.List;
 public class LabelController {
     @Autowired
     private LabelRepository labelRepository;
+    @Autowired
+    private HiloRepository hiloRepository;
 
     @GetMapping
     public ResponseEntity<List<Label>> obtenerTodasLasEtiquetas() {
@@ -46,8 +50,14 @@ public class LabelController {
             throw new ItemNotFoundException();
         }
 
-        labelRepository.delete(etiqueta);
-        return ResponseEntity.ok("Etiqueta eliminada con éxito");
+        List<Hilo> hilosConEtiqueta = hiloRepository.findByNombreEtiqueta(valor);
+        for (Hilo hilo : hilosConEtiqueta) {
+            hilo.removeLabel(etiqueta); // Elimina la etiqueta de la lista de etiquetas del hilo
+            hiloRepository.save(hilo); // Guarda el hilo actualizado
+        }
+
+        labelRepository.delete(etiqueta); // Elimina la etiqueta de la base de datos
+        return ResponseEntity.ok("Etiqueta y asociaciones eliminadas con éxito");
     }
 
 

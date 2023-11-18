@@ -31,6 +31,8 @@ public class Usuario implements UserDetails {
 
     private String background_picture;
 
+    private String enlace_imagen;
+
     @Enumerated(EnumType.STRING)
     private Role role;
     @ElementCollection
@@ -49,13 +51,14 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
-    public Usuario(Long id, String nickname, String password, String email, String image_path, String background_picture, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
+    public Usuario(Long id, String nickname, String password, String email, String image_path, String background_picture, String enlace_imagen, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.image_path = image_path;
         this.background_picture = background_picture;
+        this.enlace_imagen = enlace_imagen;
         this.role = role;
         this.favoriteAnimeIds = favoriteAnimeIds;
         this.hilosCreados = hilosCreados;
@@ -133,6 +136,14 @@ public class Usuario implements UserDetails {
 
     public void setBackground_picture(String background_picture) {
         this.background_picture = background_picture;
+    }
+
+    public String getEnlace_imagen() {
+        return enlace_imagen;
+    }
+
+    public void setEnlace_imagen(String enlace_imagen) {
+        this.enlace_imagen = enlace_imagen;
     }
 
     @Override

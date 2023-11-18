@@ -22,6 +22,7 @@ public class UsuarioDTO {
     private Set<Long> respuestasParticipadas = new HashSet<>();
 
 
+
     public UsuarioDTO() {
     }
 

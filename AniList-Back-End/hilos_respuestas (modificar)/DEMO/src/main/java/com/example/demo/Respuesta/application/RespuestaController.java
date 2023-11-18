@@ -173,4 +173,16 @@ public class RespuestaController {
 
             return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
     }
+
+
+    // Método PATCH(CONTENIDO,TEMA,FECHA) DELETE
+
+
+
+
+
+
+
+
+
 }

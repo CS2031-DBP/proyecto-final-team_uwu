@@ -43,12 +43,12 @@ public class Hilo {
     private Long cantidadReports;
 
     @ManyToMany
-    @JoinTable(name = "hilo_label",
+    @JoinTable(
+            name = "hilo_label",
             joinColumns = @JoinColumn(name = "hilo_id"),
-            inverseJoinColumns = @JoinColumn(name = "label_id"))
+            inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
     private List<Label> labels = new ArrayList<>();
-
-
     public Hilo() {
     }
 
@@ -137,4 +137,17 @@ public class Hilo {
     public void setLabels(List<Label> labels) {
         this.labels = labels;
     }
+
+    // Métodos para manejar la relación
+    public void addLabel(Label label) {
+        labels.add(label);
+        label.getHilos().add(this); // Establecer la relación inversa
+    }
+
+    public void removeLabel(Label label) {
+        labels.remove(label);
+        label.getHilos().remove(this); // Eliminar la relación inversa
+    }
+
+
 }

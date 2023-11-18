@@ -2,10 +2,10 @@ package com.example.demo.Labels.domain;
 
 
 import com.example.demo.Hilos.domain.Hilo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.validator.constraints.UUID;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,11 +19,14 @@ public class Label{
     @Column(nullable = false)
     private String valor;
 
+    @ManyToMany(mappedBy = "labels")
+    @JsonIgnore
+    private List<Hilo> hilos = new ArrayList<>();
+
     public Label() {
     }
 
-    public Label(Long id, String valor) {
-        this.id = id;
+    public Label(String valor) {
         this.valor = valor;
     }
 
@@ -43,6 +46,13 @@ public class Label{
         this.valor = valor;
     }
 
+    public List<Hilo> getHilos() {
+        return hilos;
+    }
+
+    public void setHilos(List<Hilo> hilos) {
+        this.hilos = hilos;
+    }
 }
 
 
