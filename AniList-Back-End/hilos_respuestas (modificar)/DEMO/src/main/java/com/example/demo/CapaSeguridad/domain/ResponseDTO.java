@@ -5,13 +5,16 @@ public class ResponseDTO {
     private String token;
     private String nickName;
 
-    public ResponseDTO(Long id, String token, String nickName) {
+    private String image_path;
+    private String background_picture;
+
+    public ResponseDTO(Long id, String token, String nickName, String image_path, String background_picture) {
         this.id = id;
         this.token = token;
         this.nickName = nickName;
+        this.image_path = image_path;
+        this.background_picture = background_picture;
     }
-
-
 
     public String getNickName() {
         return nickName;
@@ -43,5 +46,21 @@ public class ResponseDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
+
+    public String getBackground_picture() {
+        return background_picture;
+    }
+
+    public void setBackground_picture(String background_picture) {
+        this.background_picture = background_picture;
     }
 }

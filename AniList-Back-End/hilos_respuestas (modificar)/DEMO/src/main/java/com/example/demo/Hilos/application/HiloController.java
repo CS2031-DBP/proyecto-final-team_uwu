@@ -115,7 +115,7 @@ public class HiloController {
         hilo.setUsuario(usuario);
         hilo.setTema(hiloDTO.getTema());
         hilo.setContenido(hiloDTO.getContenido());
-        hilo.setFechaCreacion(hiloDTO.getFechaCreacion());
+        hilo.setFechaCreacion(new Date());
 
         List<String> etiquetasAsociadas = hiloDTO.getLabelValores();
 

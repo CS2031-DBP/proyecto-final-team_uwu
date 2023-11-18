@@ -2,6 +2,7 @@ package com.example.demo.Usuario.usuarioDTO;
 
 
 import jakarta.persistence.Lob;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashSet;
 import java.util.Set;

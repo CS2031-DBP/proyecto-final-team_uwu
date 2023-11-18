@@ -33,4 +33,9 @@ public class RestExceptionHandler {
         ErrorMessage error = new ErrorMessage(404,"Hilo no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<ErrorMessage> usuarioNoEncontrado(){
+        ErrorMessage error = new ErrorMessage(404,"Usuario no encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }

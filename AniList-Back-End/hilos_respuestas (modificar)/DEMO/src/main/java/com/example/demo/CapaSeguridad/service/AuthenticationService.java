@@ -70,12 +70,22 @@ public class AuthenticationService {
 
     public ResponseDTO signin(SigninRequest request) {
         var user = usuarioService.getUserByEmail(request.getEmail());
+        var userDTO = new ResponseDTO();
+        if(user.getImage_path() != null){
+            userDTO.setImage_path("http://localhost:8080/usuarios/" + user.getId() + "/profile_picture");
+        }
+        if(user.getBackground_picture() != null){
+            userDTO.setBackground_picture("http://localhost:8080/usuarios/" + user.getId() + "/banner_picture");
+        }
         var jwt = jwtService.generateToken(user);
         JwtAuthenticationResponse response = new JwtAuthenticationResponse();
         response.setToken(jwt);
         ResponseDTO info = new ResponseDTO();
         info.setId(user.getId());
         info.setToken(jwt);
+        info.setImage_path(userDTO.getImage_path());
+        info.setNickName(user.getNickname());
+        info.setBackground_picture(userDTO.getBackground_picture());
         return info;
     }
 

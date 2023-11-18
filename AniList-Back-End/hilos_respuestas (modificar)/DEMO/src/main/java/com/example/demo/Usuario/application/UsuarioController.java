@@ -1,12 +1,17 @@
 package com.example.demo.Usuario.application;
 
 
+import com.example.demo.CapaSeguridad.config.SecurityConfiguration;
+import com.example.demo.CapaSeguridad.exception.EmailAlreadyExitsException;
+import com.example.demo.CapaSeguridad.exception.UserAlreadyExistsException;
+import com.example.demo.CapaSeguridad.exception.UserNotFoundException;
 import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Hilos.domain.HiloRepository;
 import com.example.demo.Respuesta.domain.Respuesta;
 import com.example.demo.Hilos.domain.HiloService;
 import com.example.demo.Respuesta.domain.RespuestaService;
+import com.example.demo.Usuario.domain.UsuarioRepository;
 import com.example.demo.Usuario.usuarioDTO.UsuarioDTO;
 import com.example.demo.Usuario.domain.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +21,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jmx.export.notification.UnableToSendNotificationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.PasswordAuthentication;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +46,9 @@ public class UsuarioController {
     UsuarioService usuarioService;
 
     @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Autowired
     HiloService hiloService;
 
     @Autowired
@@ -45,6 +56,9 @@ public class UsuarioController {
 
     @Autowired
     HiloRepository hiloRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @GetMapping
@@ -228,7 +242,54 @@ public class UsuarioController {
         }
     }
 
-//FALTA IMPLEMENTAR UN PATCH PARA ACTUALIZAR SU INFO
+    @PatchMapping("/{usuarioId}")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long usuarioId, @RequestBody Usuario usuarioActualizado) {
+        Usuario usuario = usuarioService.getUserById(usuarioId);
+        if(usuario == null) {
+            throw new UserNotFoundException();
+        }
+        // Verificar si el nuevo email ya está asociado a otro usuario
+        String newEmail = usuarioActualizado.getEmail();
+        if (!usuario.getEmail().equals(newEmail) && usuarioService.existsUserByEmail(newEmail)) {
+            throw new EmailAlreadyExitsException(); // Puedes crear esta excepción personalizada
+        }
+
+        // Verificar si el nuevo nickname ya está asociado a otro usuario
+        String newNickname = usuarioActualizado.getNickname();
+        if (!usuario.getNickname().equals(newNickname) && usuarioService.existUserByNickname(newNickname)) {
+            throw new UserAlreadyExistsException(); // Puedes crear esta excepción personalizada
+        }
+
+        // Actualizar los campos del usuario con los valores proporcionados
+        usuario.setNickname(usuarioActualizado.getNickname());
+        usuario.setEmail(usuarioActualizado.getEmail());
+
+        // Verificar si se proporciona un nuevo password y codificarlo antes de guardarlo
+        String newPassword = usuarioActualizado.getPassword();
+        if (newPassword != null && !newPassword.isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            usuario.setPassword(encodedPassword);
+        }
+
+        // Guardar los cambios en la base de datos
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+
+        // Convertir el usuario actualizado a un DTO antes de devolverlo en la respuesta
+        UsuarioDTO updatedUsuarioDTO = convertToDTO(updatedUsuario);
+
+        return ResponseEntity.ok(updatedUsuarioDTO);
+    }
+
+    // Método para convertir un Usuario a un UsuarioDTO
+    private UsuarioDTO convertToDTO(Usuario usuario) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setNickname(usuario.getNickname());
+        usuarioDTO.setCorreo(usuario.getEmail());
+        return usuarioDTO;
+    }
+
+
 
 
 
