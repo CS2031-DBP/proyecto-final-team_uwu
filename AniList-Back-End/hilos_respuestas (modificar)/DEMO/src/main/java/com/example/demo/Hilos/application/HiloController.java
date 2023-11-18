@@ -1,5 +1,6 @@
 package com.example.demo.Hilos.application;
 
+import com.example.demo.CapaSeguridad.exception.HiloNotFoundException;
 import com.example.demo.Hilos.hilosDTO.HiloDTO;
 import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Hilos.domain.HiloRepository;
@@ -162,16 +163,17 @@ public class HiloController {
 
         return new ResponseEntity<>(hiloDTO, HttpStatus.CREATED);
     }
-    @GetMapping("/por_etiqueta")
-    public ResponseEntity<List<HiloDTO>> obtenerHilosPorEtiqueta(@RequestParam("nombreEtiqueta") String nombreEtiqueta) {
+
+    @GetMapping("/por_etiqueta/{nombreEtiqueta}")
+    public ResponseEntity<List<HiloDTO>> obtenerHilosPorEtiqueta(@PathVariable("nombreEtiqueta") String nombreEtiqueta) {
         List<Hilo> hilos = hiloRepository.findByNombreEtiqueta(nombreEtiqueta);
 
         if (hilos.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            throw new HiloNotFoundException();
         }
 
         List<HiloDTO> hiloDTOs = hilos.stream()
-                .map(this::convertToDTO) // Usando el método convertToDTO que transforma Hilo a HiloDTO
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(hiloDTOs);
@@ -186,11 +188,56 @@ public class HiloController {
             hiloRepository.delete(hilo);
             return ResponseEntity.ok("Hilo eliminado exitosamente");
         } else {
-            return ResponseEntity.notFound().build();
+            throw new HiloNotFoundException();
         }
     }
 
+    @PatchMapping("/{hiloId}")
+    public ResponseEntity<HiloDTO> updateHilo(@PathVariable Long hiloId, @RequestBody HiloDTO hiloDTO) {
+        Hilo hilo = hiloRepository.findById(hiloId)
+                .orElseThrow(() -> new EntityNotFoundException("Hilo not found"));
 
+        // Actualizar los campos del hilo con los valores proporcionados en el DTO
+        hilo.setTema(hiloDTO.getTema());
+        hilo.setContenido(hiloDTO.getContenido());
+        hilo.setFechaCreacion(hiloDTO.getFechaCreacion());
+
+        // Obtener los valores de las etiquetas desde el DTO
+        List<String> etiquetasAsociadas = hiloDTO.getLabelValores();
+
+        List<Label> etiquetas = new ArrayList<>();
+
+        // Iterar sobre los valores de las etiquetas proporcionados en el DTO
+        for (String valor : etiquetasAsociadas) {
+            Label label = labelRepository.findByValor(valor);
+
+            if (label == null) {
+                label = new Label(valor);
+                label = labelRepository.save(label);
+            }
+
+            etiquetas.add(label);
+        }
+
+        // Actualizar las etiquetas del hilo
+        hilo.setLabels(etiquetas);
+
+        // Guardar los cambios en la base de datos
+        Hilo updatedHilo = hiloRepository.save(hilo);
+
+        // Crear el DTO actualizado del hilo
+        HiloDTO updatedHiloDTO = new HiloDTO();
+        updatedHiloDTO.setId(updatedHilo.getId());
+        updatedHiloDTO.setTema(updatedHilo.getTema());
+        updatedHiloDTO.setContenido(updatedHilo.getContenido());
+        updatedHiloDTO.setFechaCreacion(updatedHilo.getFechaCreacion());
+        updatedHiloDTO.setUserId(updatedHilo.getUsuario().getId());
+        updatedHiloDTO.setUserNickname(updatedHilo.getUsuario().getNickname());
+        updatedHiloDTO.setImage_path(updatedHilo.getUsuario().getImage_path());
+        updatedHiloDTO.setLabelValores(etiquetasAsociadas);
+
+        return ResponseEntity.ok(updatedHiloDTO);
+    }
 
     //PATCH PARA HILOS(ACTUALIZAR TEMA,CONTENIDO,FECHA,LABELS)
 

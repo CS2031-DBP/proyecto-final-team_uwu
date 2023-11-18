@@ -28,4 +28,9 @@ public class RestExceptionHandler {
         ErrorMessage error = new ErrorMessage(404,"Item no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(HiloNotFoundException.class)
+    protected ResponseEntity<ErrorMessage> hiloNoEncontrado(){
+        ErrorMessage error = new ErrorMessage(404,"Hilo no encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
