@@ -11,4 +11,7 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Long> {
     List<Respuesta> findByUsuariosParticipantes(Usuario usuario);
     List<Respuesta> findByHilo(Hilo hilo);
 
+    List<Respuesta> findByRespuestaPadreIsNull();
+
+    List<Respuesta> findByRespuestaPadreId(Long respuestaPadreId);
 }
