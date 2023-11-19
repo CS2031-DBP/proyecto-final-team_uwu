@@ -54,15 +54,26 @@ public class Respuesta {
     private Set<Usuario> usuariosParticipantes = new HashSet<>();
 
 
+    private String imagen;
+
+
     // Constructor vacío
     public Respuesta() {
     }
 
     // Constructor con parámetros
-    public Respuesta(Long isReport, String contenido, int cantidadReacciones) {
+
+    public Respuesta(Long id, Long isReport, String contenido, int cantidadReacciones, Hilo hilo, Respuesta respuestaPadre, List<Respuesta> subrespuestas, Usuario usuario, Set<Usuario> usuariosParticipantes, String imagen) {
+        this.id = id;
         this.isReport = isReport;
         this.contenido = contenido;
         this.cantidadReacciones = cantidadReacciones;
+        this.hilo = hilo;
+        this.respuestaPadre = respuestaPadre;
+        this.subrespuestas = subrespuestas;
+        this.usuario = usuario;
+        this.usuariosParticipantes = usuariosParticipantes;
+        this.imagen = imagen;
     }
 
     // Getters y setters
@@ -136,5 +147,21 @@ public class Respuesta {
 
     public void setUsuariosParticipantes(Set<Usuario> usuariosParticipantes) {
         this.usuariosParticipantes = usuariosParticipantes;
+    }
+
+    public Long getIsReport() {
+        return isReport;
+    }
+
+    public void setIsReport(Long isReport) {
+        this.isReport = isReport;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

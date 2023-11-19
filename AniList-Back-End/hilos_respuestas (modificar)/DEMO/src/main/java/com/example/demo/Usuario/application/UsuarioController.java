@@ -66,28 +66,29 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioDTO>> getUsuarios() {
         List<Usuario> usuarios = usuarioService.getUsuarios();
         List<UsuarioDTO> usuarioDTOs = new ArrayList<>();
-        for(Usuario usuario : usuarios) {
+        for (Usuario usuario : usuarios) {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
             usuarioDTO.setCorreo(usuario.getUsername());
-            if(usuario.getImage_path() != null){
+            if (usuario.getImage_path() != null) {
                 usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
             }
-            if(usuario.getBackground_picture() != null){
+            if (usuario.getBackground_picture() != null) {
                 usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
             }
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
-            for(Hilo hilos: usuario.getHilosCreados()){
+            for (Hilo hilos : usuario.getHilosCreados()) {
                 usuarioDTO.getHilosCreados().add(hilos.getId());
             }
-            for(Respuesta respuesta : usuario.getRespuestasParticipadas()){
+            for (Respuesta respuesta : usuario.getRespuestasParticipadas()) {
                 usuarioDTO.getRespuestasParticipadas().add(respuesta.getId());
             }
             usuarioDTOs.add(usuarioDTO);
         }
         return ResponseEntity.ok(usuarioDTOs);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUserById(@PathVariable Long id) {
         Usuario usuario = usuarioService.getUserById(id);
@@ -96,17 +97,17 @@ public class UsuarioController {
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
             usuarioDTO.setCorreo(usuario.getUsername());
-            if(usuario.getImage_path() != null){
+            if (usuario.getImage_path() != null) {
                 usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
             }
-            if(usuario.getBackground_picture() != null){
+            if (usuario.getBackground_picture() != null) {
                 usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
             }
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
-            for(Hilo hilo: usuario.getHilosCreados()){
+            for (Hilo hilo : usuario.getHilosCreados()) {
                 usuarioDTO.getHilosCreados().add(hilo.getId());
             }
-            for(Respuesta respuesta : usuario.getRespuestasParticipadas()){
+            for (Respuesta respuesta : usuario.getRespuestasParticipadas()) {
                 usuarioDTO.getRespuestasParticipadas().add(respuesta.getId());
             }
             return ResponseEntity.ok(usuarioDTO);
@@ -193,6 +194,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
     @GetMapping("/{usuario_id}/profile_picture")
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable("usuario_id") Long usuarioId) {
         try {
@@ -247,7 +249,7 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping("/{usuarioId}")
+    /*@PatchMapping("/{usuarioId}")
     public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long usuarioId, @RequestBody Usuario usuarioActualizado) {
         Usuario usuario = usuarioService.getUserById(usuarioId);
         if(usuario == null) {
@@ -256,6 +258,7 @@ public class UsuarioController {
 
         // Verificar si el nuevo nickname ya está asociado a otro usuario
         String newNickname = usuarioActualizado.getNickname();
+        System.out.println(newNickname);
         if (usuario.getNickname().equals(newNickname) || usuarioService.existUserByNickname(newNickname) ) {
             throw new UserAlreadyExistsException(); // Puedes crear esta excepción personalizada
         }
@@ -265,7 +268,10 @@ public class UsuarioController {
 
         // Verificar si el nuevo email ya está asociado a otro usuario
         String newEmail = usuarioActualizado.getEmail();
+        System.out.println(newEmail);
+        System.out.println(usuario.getEmail());
         if (usuario.getEmail().equals(newEmail) || usuarioService.existsUserByEmail(newEmail)) {
+            System.out.println("entra");
             throw new EmailAlreadyExitsException(); // Puedes crear esta excepción personalizada
         }
         usuario.setEmail(usuarioActualizado.getEmail());
@@ -305,13 +311,105 @@ public class UsuarioController {
             usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
         }
         return usuarioDTO;
+    }*/
+    /*@PatchMapping("/{usuarioId}")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long usuarioId, @RequestBody Usuario usuarioActualizado) {
+        Usuario usuario = usuarioService.getUserById(usuarioId);
+        if (usuario == null) {
+            throw new UserNotFoundException();
+        }
+
+        if (usuarioActualizado.getNickname() != null || !usuario.getNickname().equals(usuarioActualizado.getNickname())) {
+            if (usuarioService.existUserByNickname(usuarioActualizado.getNickname())) {
+                throw new UserAlreadyExistsException(); // Puedes crear esta excepción personalizada
+            }
+            usuario.setNickname(usuarioActualizado.getNickname());
+        }
+
+        if (usuarioActualizado.getEmail() != null || !usuario.getEmail().equals(usuarioActualizado.getEmail())) {
+            if (usuarioService.existsUserByEmail(usuarioActualizado.getEmail())) {
+                throw new EmailAlreadyExitsException(); // Puedes crear esta excepción personalizada
+            }
+            usuario.setEmail(usuarioActualizado.getEmail());
+        }
+
+        if (usuarioActualizado.getPassword() != null || !usuarioActualizado.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(usuarioActualizado.getPassword());
+            usuario.setPassword(encodedPassword);
+        }
+
+        // Guardar los cambios en la base de datos
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+
+        // Convertir el usuario actualizado a un DTO antes de devolverlo en la respuesta
+        UsuarioDTO updatedUsuarioDTO = convertToDTO(updatedUsuario);
+
+        return ResponseEntity.ok(updatedUsuarioDTO);
+    }*/
+    @PatchMapping("/{usuarioId}")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long usuarioId, @RequestBody Usuario usuarioActualizado) {
+        Usuario usuario = usuarioService.getUserById(usuarioId);
+        if (usuario == null) {
+            throw new UserNotFoundException();
+        }
+
+        // Verificar si el nuevo nickname ya está asociado a otro usuario
+        String newNickname = usuarioActualizado.getNickname();
+        if (newNickname != null && !usuario.getNickname().equals(newNickname) && usuarioService.existUserByNickname(newNickname)) {
+            throw new UserAlreadyExistsException();
+        }
+
+        // Verificar si el nuevo email ya está asociado a otro usuario
+        String newEmail = usuarioActualizado.getEmail();
+        if (newEmail != null && !usuario.getEmail().equals(newEmail) && usuarioService.existsUserByEmail(newEmail)) {
+            throw new EmailAlreadyExitsException();
+        }
+
+        // Actualizar los campos del usuario con los valores proporcionados
+        if (usuarioActualizado.getNickname() != null) {
+            usuario.setNickname(usuarioActualizado.getNickname());
+        }
+
+        if (usuarioActualizado.getEmail() != null) {
+            usuario.setEmail(usuarioActualizado.getEmail());
+        }
+
+        if (usuarioActualizado.getPassword() != null) {
+            String newPassword = usuarioActualizado.getPassword();
+            if (!newPassword.isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(newPassword);
+                usuario.setPassword(encodedPassword);
+            } else {
+                throw new NotNullPasswordException();
+            }
+        }
+
+        // Guardar los cambios en la base de datos
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+
+        // Convertir el usuario actualizado a un DTO antes de devolverlo en la respuesta
+        UsuarioDTO updatedUsuarioDTO = convertToDTO(updatedUsuario);
+
+        return ResponseEntity.ok(updatedUsuarioDTO);
     }
 
-
-
-
-
+    private UsuarioDTO convertToDTO(Usuario usuario) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setNickname(usuario.getNickname());
+        usuarioDTO.setCorreo(usuario.getEmail());
+        if (usuario.getImage_path() != null) {
+            usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
+        }
+        if (usuario.getBackground_picture() != null) {
+            usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
+        }
+        return usuarioDTO;
+    }
 }
+
+
+
 
 
 

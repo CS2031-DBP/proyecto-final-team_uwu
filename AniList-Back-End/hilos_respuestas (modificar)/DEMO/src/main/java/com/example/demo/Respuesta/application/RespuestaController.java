@@ -1,5 +1,6 @@
 package com.example.demo.Respuesta.application;
 
+import com.example.demo.CapaSeguridad.exception.HiloNotFoundException;
 import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Hilos.domain.HiloRepository;
 import com.example.demo.Respuesta.respuestaDTO.RespuestaDTO;
@@ -38,23 +39,49 @@ public class RespuestaController {
     @Autowired
     private UsuarioService usuarioService;
 
+
     @GetMapping
-    public List<RespuestaDTO> getRespuestas() {
+    public List<RespuestaDTO> getRespuestas() { //me bota todas las respuestas
         List<Respuesta> respuestas = respuestaRepository.findAll();
-        UsuarioDTO_thread user;
-        // Mapea las respuestas a RespuestaDTO
-        List<RespuestaDTO> respuestaDTOs = respuestas.stream()
-                .map(respuesta -> new RespuestaDTO(
-                        respuesta.getId(),
-                        respuesta.getContenido(),
-                        respuesta.getSubrespuestas().stream()
-                                .map(Respuesta::getId)
-                                .collect(Collectors.toList())
-                ,respuesta.getHilo().getId(),respuesta.getUsuario().getId()))
-                .collect(Collectors.toList());
+
+        // Mapear las respuestas a RespuestaDTO
+        List<RespuestaDTO> respuestaDTOs = respuestas.stream().map(respuesta -> {
+            RespuestaDTO respuestaDTO = new RespuestaDTO();
+            respuestaDTO.setId(respuesta.getId());
+            respuestaDTO.setContenido(respuesta.getContenido());
+            respuestaDTO.setSubRespuestaIds(respuesta.getSubrespuestas().stream()
+                    .map(Respuesta::getId)
+                    .collect(Collectors.toList()));
+            respuestaDTO.setHiloId(respuesta.getHilo().getId());
+            respuestaDTO.setUsuarioid(respuesta.getUsuario().getId());
+
+            UsuarioDTO_thread userDTO = new UsuarioDTO_thread();
+            userDTO.setImage_path(respuesta.getUsuario().getImage_path());
+
+            // Obtener al usuario dueño del hilo
+            Usuario usuarioDueñoHilo = respuesta.getHilo().getUsuario(); // Suponiendo que existe un método "getUsuario" en la entidad Hilo
+            UsuarioDTO_thread ownerDTO = new UsuarioDTO_thread();
+            ownerDTO.setImage_path(usuarioDueñoHilo.getImage_path());
+
+            respuestaDTO.setUsuarioM(ownerDTO);
+
+            return respuestaDTO;
+        }).collect(Collectors.toList());
+
+        // Construir la URL completa de la imagen del usuario
+        respuestaDTOs.forEach(respuestaDTO -> {
+            String imagePath = respuestaDTO.getUsuarioM().getImage_path();
+            if (imagePath != null) {
+                respuestaDTO.getUsuarioM().setImage_path("http://localhost:8080/usuarios/" + respuestaDTO.getUsuarioM().getNickname() + "/profile_picture");
+            }
+        });
+
         return respuestaDTOs;
     }
-    @GetMapping("/{messageId}")
+
+
+
+    /*@GetMapping("/{messageId}") //esto me bota solo una respuesta identificado por su id
     public RespuestaDTO getRespuesta(@PathVariable Long messageId) {
         Optional<Respuesta> respuesta = respuestaRepository.findById(messageId);
         if (respuesta.isPresent()){
@@ -73,35 +100,29 @@ public class RespuestaController {
             return newRespuesta;
         }
         return null;
-    }
-    @GetMapping("/{userId}/{hiloId}")
+    }*/
+
+
+    @GetMapping("/{hiloId}")   //esto me bota todas las respuestas de un hilo identificado por su id
     public ResponseEntity<List<RespuestaDTO>> getRespuestasByUserAndHilo(
-            @PathVariable Long userId,
             @PathVariable Long hiloId) {
+        System.out.println("entrando a metodo");
         List<RespuestaDTO> respuestaDto = new ArrayList<>();
-        List<Long> temp = new ArrayList<>();
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(userId);
-        if(usuarioOptional.isPresent()){
-            List<Hilo> prueba = hiloRepository.findByUsuario(usuarioOptional.get());
-            for(Hilo hilo : prueba){
-                if(hilo.getId()==hiloId){
-                    List<Respuesta> respuestas = respuestaRepository.findByHilo(hilo);
-                    respuestaDto = respuestas.stream()
-                            .map(respuesta -> new RespuestaDTO(
-                                    respuesta.getId(),
-                                    respuesta.getContenido(),
-                                    respuesta.getSubrespuestas().stream()
-                                            .map(Respuesta::getId)
-                                            .collect(Collectors.toList())
-                                    ,respuesta.getHilo().getId(),respuesta.getUsuario().getId()))
-                            .collect(Collectors.toList());
-                }
-            }
-            System.out.println(temp);
+        Optional<Hilo> hiloOptional = hiloRepository.findById(hiloId);
+        if(hiloOptional.isPresent()){
+            System.out.println("entrando a condicional");
+            List<Respuesta> respuestas = respuestaRepository.findByHilo(hiloOptional.get());
+            respuestaDto = respuestas.stream()
+                    .map(respuesta -> new RespuestaDTO(
+                            respuesta.getId(),
+                            respuesta.getContenido(),
+                            respuesta.getSubrespuestas().stream()
+                                    .map(Respuesta::getId)
+                                    .collect(Collectors.toList())
+                            ,respuesta.getHilo().getId(),respuesta.getUsuario().getId(),
+                            (respuesta.getUsuario().getImage_path()==null)?null:"http://localhost:8080/usuarios/" + respuesta.getUsuario().getId() + "/profile_picture"))
+                    .collect(Collectors.toList());
         }
-
-
-
         return new ResponseEntity<>(respuestaDto,HttpStatus.OK);
     }
 
@@ -127,6 +148,7 @@ public class RespuestaController {
                 Hilo hilo = existe.get();
                 // You can fetch the Usuario based on userNickname or userId
                 Usuario usuario = usuarioService.getUserById(idEmisor);
+                System.out.println(usuario.getId());
                 System.out.println(respuestaDTO.getUsuarioid());
                 Respuesta respuesta = new Respuesta();
                 respuesta.setContenido(respuestaDTO.getContenido());
@@ -136,11 +158,12 @@ public class RespuestaController {
                 return new ResponseEntity<>(nuevaRespuesta, HttpStatus.CREATED);
             }
         }
-        return ResponseEntity.badRequest().build();
+        throw new HiloNotFoundException();
     }
 
     // Método PATCH para añadir una subrespuesta a una respuesta existente
-    @PatchMapping("/{userId}/{respuestaId}")
+    // En progreso
+    /*@PatchMapping("/{userId}/{respuestaId}")
     public ResponseEntity<RespuestaDTO> addSubrespuesta(
             @PathVariable Long respuestaId,
             @PathVariable Long userId,
@@ -172,7 +195,7 @@ public class RespuestaController {
             );
 
             return new ResponseEntity<>(respuestaDTO, HttpStatus.OK);
-    }
+    }*/
 
 
     // Método PATCH(CONTENIDO,TEMA,FECHA) DELETE

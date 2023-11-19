@@ -17,6 +17,8 @@ public class RespuestaDTO {
 
     private Long usuarioid;
 
+    private String imagen;
+
     private UsuarioDTO_thread usuarioM = new UsuarioDTO_thread();
 
     public RespuestaDTO() {
@@ -30,20 +32,23 @@ public class RespuestaDTO {
         this.usuarioM = usuarioM;
     }
 
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid, UsuarioDTO_thread usuarioM) {
+    /*public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid, UsuarioDTO_thread usuarioM,String imagen) {
         this.id = id;
         this.contenido = contenido;
         this.subRespuestaIds = subRespuestaIds;
         HiloId = hiloId;
         this.usuarioid = usuarioid;
         this.usuarioM = usuarioM;
-    }
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid) {
+        this.imagen= imagen;
+    }*/
+
+    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid, String imagen) {
         this.id = id;
         this.contenido = contenido;
         this.subRespuestaIds = subRespuestaIds;
         HiloId = hiloId;
         this.usuarioid = usuarioid;
+        this.imagen = imagen;
     }
 
     public Long getId() {
@@ -84,5 +89,13 @@ public class RespuestaDTO {
 
     public void setUsuarioid(Long usuarioid) {
         this.usuarioid = usuarioid;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }
