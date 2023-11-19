@@ -38,4 +38,9 @@ public class RestExceptionHandler {
         ErrorMessage error = new ErrorMessage(404,"Usuario no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(NotNullPasswordException.class)
+    protected ResponseEntity<ErrorMessage> passwordNoNulo(){
+        ErrorMessage error = new ErrorMessage(400,"La contraseña no puede ser nula");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

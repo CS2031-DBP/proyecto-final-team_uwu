@@ -42,7 +42,6 @@ public class UsuarioService {
 
     public Usuario getUserByEmail(String email) {
         Usuario user = usuarioRepository.findByEmail(email);
-        System.out.println("ALDAIR CHUPA CHIPI");
         if(user == null){
             throw new EmailPasswordException();
         }

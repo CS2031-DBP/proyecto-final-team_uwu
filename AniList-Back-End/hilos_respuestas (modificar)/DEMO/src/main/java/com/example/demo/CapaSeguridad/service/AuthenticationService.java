@@ -69,24 +69,34 @@ public class AuthenticationService {
     }
 
     public ResponseDTO signin(SigninRequest request) {
-        var user = usuarioService.getUserByEmail(request.getEmail());
-        var userDTO = new ResponseDTO();
-        if(user.getImage_path() != null){
-            userDTO.setImage_path("http://localhost:8080/usuarios/" + user.getId() + "/profile_picture");
+        Usuario user = usuarioService.getUserByEmail(request.getEmail());
+
+        //ResponseDTO responseDTO = new ResponseDTO();
+
+        // Verificar si la contraseña proporcionada coincide con la del usuario en la base de datos
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new EmailPasswordException();
         }
-        if(user.getBackground_picture() != null){
-            userDTO.setBackground_picture("http://localhost:8080/usuarios/" + user.getId() + "/banner_picture");
-        }
-        var jwt = jwtService.generateToken(user);
-        JwtAuthenticationResponse response = new JwtAuthenticationResponse();
-        response.setToken(jwt);
+
+        // Construir el DTO de respuesta con la información del usuario y el token JWT
         ResponseDTO info = new ResponseDTO();
         info.setId(user.getId());
-        info.setToken(jwt);
-        info.setImage_path(userDTO.getImage_path());
         info.setNickName(user.getNickname());
-        info.setBackground_picture(userDTO.getBackground_picture());
+
+        // Aquí puedes agregar la lógica para configurar las imágenes si es necesario
+        if (user.getImage_path() != null) {
+            info.setImage_path("http://localhost:8080/usuarios/" + user.getId() + "/profile_picture");
+        }
+        if (user.getBackground_picture() != null) {
+            info.setBackground_picture("http://localhost:8080/usuarios/" + user.getId() + "/banner_picture");
+        }
+
+        // Generar el token JWT para el usuario autenticado
+        String jwt = jwtService.generateToken(user);
+        info.setToken(jwt);
+
         return info;
     }
+
 
 }

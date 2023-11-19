@@ -3,6 +3,7 @@ package com.example.demo.Usuario.application;
 
 import com.example.demo.CapaSeguridad.config.SecurityConfiguration;
 import com.example.demo.CapaSeguridad.exception.EmailAlreadyExitsException;
+import com.example.demo.CapaSeguridad.exception.NotNullPasswordException;
 import com.example.demo.CapaSeguridad.exception.UserAlreadyExistsException;
 import com.example.demo.CapaSeguridad.exception.UserNotFoundException;
 import com.example.demo.Usuario.domain.Usuario;
@@ -95,8 +96,12 @@ public class UsuarioController {
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNickname(usuario.getNickname());
             usuarioDTO.setCorreo(usuario.getUsername());
-            usuarioDTO.setImage_path(usuario.getImage_path());
-            usuarioDTO.setBackground_picture(usuario.getBackground_picture());
+            if(usuario.getImage_path() != null){
+                usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
+            }
+            if(usuario.getBackground_picture() != null){
+                usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
+            }
             usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
             for(Hilo hilo: usuario.getHilosCreados()){
                 usuarioDTO.getHilosCreados().add(hilo.getId());
@@ -248,28 +253,35 @@ public class UsuarioController {
         if(usuario == null) {
             throw new UserNotFoundException();
         }
-        // Verificar si el nuevo email ya está asociado a otro usuario
-        String newEmail = usuarioActualizado.getEmail();
-        if (!usuario.getEmail().equals(newEmail) && usuarioService.existsUserByEmail(newEmail)) {
-            throw new EmailAlreadyExitsException(); // Puedes crear esta excepción personalizada
-        }
 
         // Verificar si el nuevo nickname ya está asociado a otro usuario
         String newNickname = usuarioActualizado.getNickname();
-        if (!usuario.getNickname().equals(newNickname) && usuarioService.existUserByNickname(newNickname)) {
+        if (usuario.getNickname().equals(newNickname) || usuarioService.existUserByNickname(newNickname) ) {
             throw new UserAlreadyExistsException(); // Puedes crear esta excepción personalizada
         }
-
-        // Actualizar los campos del usuario con los valores proporcionados
         usuario.setNickname(usuarioActualizado.getNickname());
+
+
+
+        // Verificar si el nuevo email ya está asociado a otro usuario
+        String newEmail = usuarioActualizado.getEmail();
+        if (usuario.getEmail().equals(newEmail) || usuarioService.existsUserByEmail(newEmail)) {
+            throw new EmailAlreadyExitsException(); // Puedes crear esta excepción personalizada
+        }
         usuario.setEmail(usuarioActualizado.getEmail());
+
+
 
         // Verificar si se proporciona un nuevo password y codificarlo antes de guardarlo
         String newPassword = usuarioActualizado.getPassword();
-        if (newPassword != null && !newPassword.isEmpty()) {
-            String encodedPassword = passwordEncoder.encode(newPassword);
-            usuario.setPassword(encodedPassword);
+        System.out.println(newPassword);
+        if (newPassword == null || newPassword.isEmpty()) {
+            throw new NotNullPasswordException();
         }
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        usuario.setPassword(encodedPassword);
+        System.out.println(encodedPassword);
+
 
         // Guardar los cambios en la base de datos
         Usuario updatedUsuario = usuarioRepository.save(usuario);
@@ -286,6 +298,12 @@ public class UsuarioController {
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setNickname(usuario.getNickname());
         usuarioDTO.setCorreo(usuario.getEmail());
+        if(usuario.getImage_path() != null){
+            usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
+        }
+        if(usuario.getBackground_picture() != null){
+            usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
+        }
         return usuarioDTO;
     }
 
