@@ -7,7 +7,7 @@ const Threads = ({ userId }) => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/api/auth/hilos')
+      .get('http://localhost:8080/hilos')
       .then((response) => {
         const sortedHilos = response.data.sort((a, b) => {
           // Ordena de forma descendente (de más reciente a más antiguo)
@@ -19,6 +19,7 @@ const Threads = ({ userId }) => {
         console.error('Error al obtener los hilos:', error);
       });
   }, []);
+  console.log(hilos);
   const calculateTimeAgo = (createdDate) => {
     const currentDate = new Date();
     const createdDateObj = new Date(createdDate);
@@ -56,14 +57,26 @@ const Threads = ({ userId }) => {
             {hilos.map((hilo) => (
                 <div className='Thread_Card' key={hilo.id}>
                   <a href={'/Threads/' + hilo.id} className='title'> {hilo.tema} </a>
-                  <p>{hilo.contenido}</p>
-
+                  <div className='body_preview'>
+                    {hilo.contenido}
+                  </div>
                   <div className='footer'>
+                    <a href={'/user/' + hilo.userNickname} className='avatar_' 
+                    style={{
+                      backgroundImage: `url(${hilo.image_path !== null ? hilo.image_path : '../images/profile/profile.png'})`,
+                       }}                   
+                    >
+                    </a>
                     <div className='name'>
-                    <a href='/'>Usuario:</a> {hilo.userNickname}
-                    <p>{calculateTimeAgo(hilo.fechaCreacion)}  </p>
+                      <a href={'/user/' + hilo.userNickname} className='name_nickname'>{hilo.userNickname}</a> 
+                      <p className='time'>{calculateTimeAgo(hilo.fechaCreacion)}  </p>
                     </div>
+                    <div className='categories'>
 
+                    </div>
+                    <div className='info'>
+
+                    </div>
                   </div>
                 </div>
             ))}

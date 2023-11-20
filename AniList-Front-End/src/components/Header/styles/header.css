@@ -15,15 +15,27 @@
     --color-green: 123,213,85;
     --color-text: 159,173,189;
 }
+.encabezado.transition.transparent{
+  background: rgba(35,38,67,.5);
 
-.encabezado {
+}
+.encabezado.transition{
   background: #152232;
+  transition: background 0.8s ease 0s, top 0.5s ease 0s;
+  top: 0;
+}
+.encabezado {
   color: #a0b1c5;
   display: flex;
   height: 75px;
   justify-content: center;
   left: 0;
-  top: 0;
+  position: fixed;
+  transition: background .8s ease,color .2s;
+  top: -97px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   width: 100%;
   z-index: 999;
   }
@@ -64,8 +76,14 @@
   letter-spacing: .01em;
   padding: 18px 16px;
   text-decoration: none;
-  color: rgb(var(--color-text));
+  color: rgb(159,173,189);
 }
+.link:hover{
+  color: #f47521;
+  scale: 1.1;
+
+}
+
 .links_login{
   align-items: center;
   display: inline-flex;
@@ -97,8 +115,8 @@
 }
 .profile img{
   cursor: pointer;
-
-  width: 70px;
+  max-width: 55px;
+  max-height: 55px;
 }
 
 
@@ -167,10 +185,23 @@ ion-icon {
   padding: 1px;
   margin-right: 15px;
 }
+#check{
+  display: none;
+}
+.cheackBoton {
+  display: none;
+}
+#icon_menu{
+  display: none;
+  float: left;
+  line-height: 100px;
+  background: none;
+  cursor: pointer;
+}
 
 .sub_menu_link span{
   font-size: 25px;
-  transition: transform 0.5s;
+  transition: transform 0.5s;   
 }
 
 .sub_menu_link:hover span{
@@ -179,4 +210,57 @@ ion-icon {
 
 .sub_menu_link:hover p{
   font-weight: 600;
+}
+.wrap_container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+}
+
+
+#check:checked ~ .wrap_container {
+  transform: translateX(0);
+}
+@media (max-width:800px){
+  #icon_menu {
+    display: block;
+  }
+
+  .cheackBoton {
+    display: block;
+  }
+  .nav__title{
+    margin-right: auto;
+  }
+  .wrap_container{
+    display: block;
+    position: fixed;
+    width: 100%;
+    background: #2c3e50;
+    top: 80px;
+    left: -100%;
+    height: auto;
+    text-align: center;
+    transition: all .5s; /* Cambié 'left' a 'transform' */
+    z-index: 2000;
+  }
+  .wrap_container .links{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+  
+  }
+
+  #check:checked ~ .wrap_container {
+    left: 0;
+    background: #fff;
+
+  }
+
+  .wrap_container .search-bar-container{
+    display: none;
+  }
 }

@@ -43,4 +43,14 @@ public class RestExceptionHandler {
         ErrorMessage error = new ErrorMessage(400,"La contraseña no puede ser nula");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+    @ExceptionHandler(ActualizacionException.class)
+    protected ResponseEntity<ErrorMessage> actualizacionFallida(){
+        ErrorMessage error = new ErrorMessage(403,"Solo se puede modificar el contenido de la respuesta");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+    @ExceptionHandler(RespuestaNotFoundException.class)
+    protected ResponseEntity<ErrorMessage> respuestaNoEncontrada(){
+        ErrorMessage error = new ErrorMessage(404,"Respuesta no encontrada");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }

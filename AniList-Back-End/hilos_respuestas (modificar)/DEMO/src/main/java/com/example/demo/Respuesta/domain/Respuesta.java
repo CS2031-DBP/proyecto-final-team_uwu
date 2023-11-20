@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -27,18 +25,19 @@ public class Respuesta {
     private String contenido;
 
     @Column(name = "cantidad_reacciones", nullable = false)
-    private int cantidadReacciones;
+    private int cantidadReacciones=0;
 
     @ManyToOne
     @JoinColumn(name = "hilo_id")
     private Hilo hilo;
 
     @ManyToOne
-    @JoinColumn(name = "respuesta_padre_id") // Relación de autoreferencia
+    @JoinColumn(name = "respuesta_padre_id") // Relación de autoreferencia@
+    @JsonIgnore
     private Respuesta respuestaPadre;
 
     @OneToMany(mappedBy = "respuestaPadre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Respuesta> subrespuestas;
+    private List<Respuesta> subrespuestas = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -57,13 +56,17 @@ public class Respuesta {
     private String imagen;
 
 
+    private Date fechaCreacion;
+
+
     // Constructor vacío
     public Respuesta() {
     }
 
     // Constructor con parámetros
 
-    public Respuesta(Long id, Long isReport, String contenido, int cantidadReacciones, Hilo hilo, Respuesta respuestaPadre, List<Respuesta> subrespuestas, Usuario usuario, Set<Usuario> usuariosParticipantes, String imagen) {
+    public Respuesta(Long id, Long isReport, String contenido, int cantidadReacciones, Hilo hilo, Respuesta respuestaPadre, List<Respuesta> subrespuestas, Usuario usuario, Set<Usuario> usuariosParticipantes, String imagen,
+                     Date fechaCreacion) {
         this.id = id;
         this.isReport = isReport;
         this.contenido = contenido;
@@ -74,6 +77,7 @@ public class Respuesta {
         this.usuario = usuario;
         this.usuariosParticipantes = usuariosParticipantes;
         this.imagen = imagen;
+        this.fechaCreacion = fechaCreacion;
     }
 
     // Getters y setters
@@ -163,5 +167,13 @@ public class Respuesta {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }
