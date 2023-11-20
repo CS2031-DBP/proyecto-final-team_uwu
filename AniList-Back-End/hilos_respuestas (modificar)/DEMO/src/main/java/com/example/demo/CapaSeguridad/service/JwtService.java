@@ -64,7 +64,5 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private Delete deleteToken(String token){
-        return deleteToken(token);
-    }
+    
 }
