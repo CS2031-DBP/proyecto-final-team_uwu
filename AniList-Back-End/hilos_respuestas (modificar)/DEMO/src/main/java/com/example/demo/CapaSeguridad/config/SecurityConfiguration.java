@@ -49,7 +49,7 @@ public class SecurityConfiguration {
 
     private RequestMatcher publicEndpoints() {
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/usuarios/**"),
+                //new AntPathRequestMatcher("/usuarios/**"),
                 new AntPathRequestMatcher("/api/**"),
                 new AntPathRequestMatcher("/hilos/**"),
                 new AntPathRequestMatcher("/respuestas/**"),
@@ -75,6 +75,8 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
 
 }
 

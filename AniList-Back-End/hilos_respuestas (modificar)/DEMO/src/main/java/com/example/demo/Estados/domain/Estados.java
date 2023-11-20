@@ -19,16 +19,16 @@ public class Estados {
 
 
     @Column(columnDefinition = "TEXT")
-    private String contenido;
+    private String contenido; // texto del estado
 
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
 
-    @Column(columnDefinition = "TEXT")
-    private String imagenPath;
+    private String user_profilepicture;
 
     @Column(columnDefinition = "TEXT")
-    private String videoPath;
+    private String imagenPath;
 
     private int cantidadReacciones;
 
@@ -41,16 +41,17 @@ public class Estados {
     public Estados() {
     }
 
-    public Estados(Long id, String nickname, String contenido, LocalDateTime fechaCreacion, String imagenPath, String videoPath, int cantidadReacciones, boolean isReport, Usuario usuario) {
+    public Estados(Long id, String nickname, String contenido, LocalDateTime fechaCreacion, String user_profilepicture, int cantidadReacciones, boolean isReport, Usuario usuario,
+                   String imagenPath) {
         this.id = id;
         this.nickname = nickname;
         this.contenido = contenido;
         this.fechaCreacion = fechaCreacion;
-        this.imagenPath = imagenPath;
-        this.videoPath = videoPath;
+        this.user_profilepicture = user_profilepicture;
         this.cantidadReacciones = cantidadReacciones;
         this.isReport = isReport;
         this.usuario = usuario;
+        this.imagenPath = imagenPath;
     }
 
     public Long getId() {
@@ -111,6 +112,14 @@ public class Estados {
         this.usuario = usuario;
     }
 
+    public String getUser_profilepicture() {
+        return user_profilepicture;
+    }
+
+    public void setUser_profilepicture(String user_profilepicture) {
+        this.user_profilepicture = user_profilepicture;
+    }
+
     public String getImagenPath() {
         return imagenPath;
     }
@@ -118,13 +127,4 @@ public class Estados {
     public void setImagenPath(String imagenPath) {
         this.imagenPath = imagenPath;
     }
-
-    public String getVideoPath() {
-        return videoPath;
-    }
-
-    public void setVideoPath(String videoPath) {
-        this.videoPath = videoPath;
-    }
-
 }

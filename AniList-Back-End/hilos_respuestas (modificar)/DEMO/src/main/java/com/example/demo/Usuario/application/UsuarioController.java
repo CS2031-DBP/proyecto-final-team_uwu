@@ -116,6 +116,34 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/buscar/{nickname}")
+    public ResponseEntity<UsuarioDTO> getUserByNickname(@PathVariable String nickname) {
+        Usuario usuario = usuarioService.getUserByNickname(nickname);
+
+        if (usuario != null) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
+            usuarioDTO.setNickname(usuario.getNickname());
+            usuarioDTO.setCorreo(usuario.getUsername());
+            if (usuario.getImage_path() != null) {
+                usuarioDTO.setImage_path("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
+            }
+            if (usuario.getBackground_picture() != null) {
+                usuarioDTO.setBackground_picture("http://localhost:8080/usuarios/" + usuario.getId() + "/banner_picture");
+            }
+            usuarioDTO.setFavoriteAnimeIds(usuario.getFavoriteAnimeIds());
+            for (Hilo hilo : usuario.getHilosCreados()) {
+                usuarioDTO.getHilosCreados().add(hilo.getId());
+            }
+            for (Respuesta respuesta : usuario.getRespuestasParticipadas()) {
+                usuarioDTO.getRespuestasParticipadas().add(respuesta.getId());
+            }
+            return ResponseEntity.ok(usuarioDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}/hilos-creados")
     public ResponseEntity<List<Hilo>> getThreadsCreatedByUser(@PathVariable Long id) {
         Usuario usuario = usuarioService.getUserById(id);

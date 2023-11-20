@@ -1,6 +1,7 @@
 package com.example.demo.Usuario.domain;
 
 import com.example.demo.CapaSeguridad.exception.EmailPasswordException;
+import com.example.demo.CapaSeguridad.exception.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
@@ -258,8 +259,13 @@ public class UsuarioService {
     }
 
 
-
-
-
-
+    public Usuario getUserByNickname(String nickname) {
+        Usuario user = usuarioRepository.findByNickname(nickname);
+        if(user == null){
+            throw new UserNotFoundException();
+        }
+        else{
+            return user;
+        }
+    }
 }

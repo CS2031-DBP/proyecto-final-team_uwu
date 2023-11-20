@@ -69,12 +69,19 @@ public class AuthenticationService {
     }
 
     public ResponseDTO signin(SigninRequest request) {
-        Usuario user = usuarioService.getUserByEmail(request.getEmail());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                ));
 
-        //ResponseDTO responseDTO = new ResponseDTO();
+        Usuario user = userRepository.findByEmail(request.getEmail());
 
-        // Verificar si la contraseña proporcionada coincide con la del usuario en la base de datos
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (user == null) {
+            user = userRepository.findByNickname(request.getNickname());
+        }
+
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new EmailPasswordException();
         }
 
@@ -82,8 +89,9 @@ public class AuthenticationService {
         ResponseDTO info = new ResponseDTO();
         info.setId(user.getId());
         info.setNickName(user.getNickname());
+        info.setEmail(user.getEmail());
 
-        // Aquí puedes agregar la lógica para configurar las imágenes si es necesario
+        // Agregar lógica para configurar las imágenes si es necesario
         if (user.getImage_path() != null) {
             info.setImage_path("http://localhost:8080/usuarios/" + user.getId() + "/profile_picture");
         }
