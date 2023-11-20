@@ -69,12 +69,6 @@ public class AuthenticationService {
     }
 
     public ResponseDTO signin(SigninRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                ));
-
         Usuario user = userRepository.findByEmail(request.getEmail());
 
         if (user == null) {

@@ -1,8 +1,11 @@
 package com.example.demo.Estados.EstadoDTO;
 
+import jdk.dynalink.linker.LinkerServices;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 public class EstadosDTO {
     private Long id;
@@ -10,25 +13,24 @@ public class EstadosDTO {
     private String nickname;
     private LocalDateTime fechaCreacion;
     private String user_profile_picture;
-    private String imagePath;
-    private String contenido; //texto del estado
+
+    private List<String> contenidos_url;
     private int cantidadReacciones;
     private boolean isReport;
 
     public EstadosDTO() {
     }
 
-    public EstadosDTO(Long id, String nickname, LocalDateTime fechaCreacion, String user_profile_picture, String contenido, int cantidadReacciones, boolean isReport,
-                      Long UserId,String imagePath) {
+    public EstadosDTO(Long id, String nickname, LocalDateTime fechaCreacion, String user_profile_picture, int cantidadReacciones, boolean isReport,
+                      Long UserId, List<String> contenidos_url) {
         this.id = id;
         this.nickname = nickname;
         this.fechaCreacion = fechaCreacion;
         this.user_profile_picture = user_profile_picture;
-        this.contenido = contenido;
         this.cantidadReacciones = cantidadReacciones;
         this.isReport = isReport;
         this.UserId = UserId;
-        this.imagePath = imagePath;
+        this.contenidos_url = contenidos_url;
     }
 
     public Long getUserId() {
@@ -80,14 +82,6 @@ public class EstadosDTO {
         isReport = report;
     }
 
-    public String getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
-
     public int getCantidadReacciones() {
         return cantidadReacciones;
     }
@@ -104,11 +98,12 @@ public class EstadosDTO {
         this.isReport = isReport;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public List<String> getContenidos_url() {
+        return contenidos_url;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setContenidos_url(List<String> contenidos_url) {
+        this.contenidos_url = contenidos_url;
     }
+
 }

@@ -11,10 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "_usuario")
@@ -52,11 +49,14 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Estados> estados = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Respuesta> respuestas = new ArrayList<>();
+
     public Usuario() {
     }
 
     public Usuario(Long id, String nickname, String password, String email, String image_path, String background_picture, String enlace_imagen, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas,
-                   Set<Estados> estados) {
+                   Set<Estados> estados, List<Respuesta> respuestas) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
@@ -69,6 +69,7 @@ public class Usuario implements UserDetails {
         this.hilosCreados = hilosCreados;
         this.respuestasParticipadas = respuestasParticipadas;
         this.estados = estados;
+        this.respuestas = respuestas;
     }
 
     public Role getRole() {
@@ -197,5 +198,13 @@ public class Usuario implements UserDetails {
 
     public void setEstados(Set<Estados> estados) {
         this.estados = estados;
+    }
+
+    public List<Respuesta> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<Respuesta> respuestas) {
+        this.respuestas = respuestas;
     }
 }

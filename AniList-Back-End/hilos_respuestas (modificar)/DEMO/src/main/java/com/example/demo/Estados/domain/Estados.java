@@ -4,8 +4,11 @@ package com.example.demo.Estados.domain;
 import com.example.demo.Usuario.domain.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "estados")
@@ -17,9 +20,10 @@ public class Estados {
     @Size(max = 50)
     private String nickname;
 
-
-    @Column(columnDefinition = "TEXT")
-    private String contenido; // texto del estado
+    @ElementCollection
+    @CollectionTable(name = "estados_contenidos", joinColumns = @JoinColumn(name = "estado_id"))
+    @Column(name = "url")
+    private List<String> contenidos = new ArrayList<>();
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
@@ -27,12 +31,10 @@ public class Estados {
 
     private String user_profilepicture;
 
-    @Column(columnDefinition = "TEXT")
-    private String imagenPath;
-
     private int cantidadReacciones;
 
     private boolean isReport;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -42,16 +44,15 @@ public class Estados {
     }
 
     public Estados(Long id, String nickname, String contenido, LocalDateTime fechaCreacion, String user_profilepicture, int cantidadReacciones, boolean isReport, Usuario usuario,
-                   String imagenPath) {
+                   List<String> contenidos) {
         this.id = id;
         this.nickname = nickname;
-        this.contenido = contenido;
+        this.contenidos = contenidos;
         this.fechaCreacion = fechaCreacion;
         this.user_profilepicture = user_profilepicture;
         this.cantidadReacciones = cantidadReacciones;
         this.isReport = isReport;
         this.usuario = usuario;
-        this.imagenPath = imagenPath;
     }
 
     public Long getId() {
@@ -70,12 +71,12 @@ public class Estados {
         this.nickname = nickname;
     }
 
-    public String getContenido() {
-        return contenido;
+    public List<String> getContenidos() {
+        return contenidos;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setContenidos(List<String> contenidos) {
+        this.contenidos = contenidos;
     }
 
     public LocalDateTime getFechaCreacion() {
@@ -120,11 +121,4 @@ public class Estados {
         this.user_profilepicture = user_profilepicture;
     }
 
-    public String getImagenPath() {
-        return imagenPath;
-    }
-
-    public void setImagenPath(String imagenPath) {
-        this.imagenPath = imagenPath;
-    }
 }

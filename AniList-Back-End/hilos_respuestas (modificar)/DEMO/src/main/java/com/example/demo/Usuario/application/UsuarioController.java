@@ -38,6 +38,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -112,7 +113,7 @@ public class UsuarioController {
             }
             return ResponseEntity.ok(usuarioDTO);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new UserNotFoundException();
         }
     }
 
@@ -179,16 +180,25 @@ public class UsuarioController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        try {
-            usuarioService.deleteUserById(id);
-            return ResponseEntity.ok("User and associated data deleted successfully");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the user");
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        Optional<Usuario> user = usuarioRepository.findById(id);
+        if (user.isPresent()) {
+            // Eliminar el usuario y sus respuestas relacionadas
+            usuarioRepository.delete(user.get());
+            return ResponseEntity.ok("Usuario y datos eliminadas correctamente.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
+
+    /*try {
+        usuarioService.deleteUserById(id);
+        return ResponseEntity.ok("User and associated data deleted successfully");
+    } catch (EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the user");
+    }*/
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UsuarioDTO usuarioDTO) {

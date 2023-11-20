@@ -6,10 +6,18 @@ import com.example.demo.Estados.EstadoDTO.EstadosDTO;
 import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Usuario.domain.UsuarioRepository;
 import com.example.demo.Usuario.domain.UsuarioService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,19 +40,18 @@ public class EstadosService {
                 .collect(Collectors.toList());
     }
 
-    private EstadosDTO mapToEstadosDTO(Estados estado) {
+    public EstadosDTO mapToEstadosDTO(Estados estado) {
         EstadosDTO estadoDTO = new EstadosDTO();
         estadoDTO.setId(estado.getId());
         estadoDTO.setUserId(estado.getUsuario().getId());
         estadoDTO.setNickname(estado.getUsuario().getNickname());
-        estadoDTO.setFechaCreacion(estado.getFechaCreacion());
+        estadoDTO.setFechaCreacion(LocalDateTime.now());
         if(estado.getUsuario().getImage_path() != null){
             estadoDTO.setUser_profile_picture("http://localhost:8080/usuarios/" + estado.getUsuario().getId() + "/profile_picture");
         }
-        estadoDTO.setContenido(estado.getContenido());
+        estadoDTO.setContenidos_url(estado.getContenidos());
         estadoDTO.setCantidadReacciones(estado.getCantidadReacciones());
         estadoDTO.setIsReport(estado.isReport());
-        estadoDTO.setImagePath(estado.getImagenPath());
         return estadoDTO;
     }
 
@@ -63,10 +70,10 @@ public class EstadosService {
         if (usuario.getImage_path() != null) {
             estado.setUser_profilepicture("http://localhost:8080/usuarios/" + usuario.getId() + "/profile_picture");
         }
-        estado.setContenido(estadoDTO.getContenido());
+        estado.setContenidos(estadoDTO.getContenidos_url());
         estado.setCantidadReacciones(estadoDTO.getCantidadReacciones());
         estado.setReport(estadoDTO.getIsReport());
-        estado.setImagenPath(estadoDTO.getImagePath());
+
 
         estadoRespository.save(estado);
 
@@ -75,10 +82,9 @@ public class EstadosService {
         estadoDTO.setNickname(usuario.getNickname());
         estadoDTO.setFechaCreacion(estado.getFechaCreacion());
         estadoDTO.setUser_profile_picture(estado.getUser_profilepicture());
-        estadoDTO.setContenido(estado.getContenido());
+        estadoDTO.setContenidos_url(estado.getContenidos());
         estadoDTO.setCantidadReacciones(estado.getCantidadReacciones());
         estadoDTO.setIsReport(estado.isReport());
-        estadoDTO.setImagePath(estado.getImagenPath());
         return estadoDTO;
     }
 
@@ -97,4 +103,8 @@ public class EstadosService {
     public void deleteEstadoById(Long estadoId) {
         estadoRespository.deleteById(estadoId);
     }
+
+
+
+
 }

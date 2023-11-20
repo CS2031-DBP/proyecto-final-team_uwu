@@ -1,8 +1,10 @@
 package com.example.demo.Estados.application;
 
 import com.example.demo.CapaSeguridad.exception.EstadoNotFoundException;
+import com.example.demo.CapaSeguridad.exception.UserNotFoundException;
 import com.example.demo.Estados.EstadoDTO.EstadosDTO;
 import com.example.demo.Estados.domain.EstadoRespository;
+import com.example.demo.Estados.domain.Estados;
 import com.example.demo.Estados.domain.EstadosService;
 import com.example.demo.Usuario.domain.Usuario;
 import com.example.demo.Usuario.domain.UsuarioRepository;
@@ -11,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +36,7 @@ public class EstadoController {
     @Autowired
     EstadosService estadosService;
 
+
     @GetMapping // Obtener todos los estados
     public ResponseEntity<List<EstadosDTO>> getAllEstados() {
         List<EstadosDTO> estados = estadosService.getAllEstados();
@@ -49,15 +55,18 @@ public class EstadoController {
         return new ResponseEntity<>(estados, HttpStatus.OK);
     }
 
-    @PostMapping("/{user_id}")  // Crear un estado
-    public ResponseEntity<EstadosDTO> Post_Estado(@PathVariable Long user_id, @RequestBody EstadosDTO estadoDTO) {
-        Optional<Usuario> usuario = usuarioRepository.findById(user_id);
-        if(usuario.isPresent()){
-            Usuario usuario1 = usuario.get();
-            EstadosDTO estado = estadosService.crearEstado(estadoDTO,usuario1);
-            return new ResponseEntity<>(estado, HttpStatus.CREATED);
-        }else {
-            throw new EstadoNotFoundException();
+    @PostMapping("/{id}")
+    public ResponseEntity<EstadosDTO> crearEstado(@PathVariable Long id,
+                                                  @RequestBody EstadosDTO estadoDTO) {
+        Optional<Usuario> optionalUser = usuarioRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            EstadosDTO estadoResponse = estadosService.crearEstado(estadoDTO, user);
+            return new ResponseEntity<>(estadoResponse, HttpStatus.CREATED);
+        } else {
+            throw new UserNotFoundException();
         }
     }
 
@@ -65,6 +74,25 @@ public class EstadoController {
     public ResponseEntity<String> deleteEstado(@PathVariable("estadoId") Long estadoId) {
         estadosService.deleteEstadoById(estadoId);
         return ResponseEntity.ok("Estado eliminado correctamente");
+    }
+
+    @PatchMapping("/{estado_id}")
+    public ResponseEntity<EstadosDTO> actualizarEstado(@PathVariable Long estado_id,
+                                                       @RequestBody EstadosDTO estadoDTO) {
+        Optional<Estados> optionalEstado = estadoRespository.findById(estado_id);
+
+        if (optionalEstado.isPresent()) {
+            Estados estado = optionalEstado.get();
+
+            if (estadoDTO.getContenidos_url() != null) {
+                estado.setContenidos(estadoDTO.getContenidos_url());
+            }
+            estadoRespository.save(estado);
+            EstadosDTO estadoResponse = estadosService.mapToEstadosDTO(estado);
+            return new ResponseEntity<>(estadoResponse, HttpStatus.OK);
+        } else {
+            throw new EstadoNotFoundException();
+        }
     }
 
 
