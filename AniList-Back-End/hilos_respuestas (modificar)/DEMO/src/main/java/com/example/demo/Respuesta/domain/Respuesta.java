@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -27,18 +25,19 @@ public class Respuesta {
     private String contenido;
 
     @Column(name = "cantidad_reacciones", nullable = false)
-    private int cantidadReacciones;
+    private int cantidadReacciones=0;
 
     @ManyToOne
     @JoinColumn(name = "hilo_id")
     private Hilo hilo;
 
     @ManyToOne
-    @JoinColumn(name = "respuesta_padre_id") // Relación de autoreferencia
+    @JoinColumn(name = "respuesta_padre_id") // Relación de autoreferencia@
+    @JsonIgnore
     private Respuesta respuestaPadre;
 
     @OneToMany(mappedBy = "respuestaPadre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Respuesta> subrespuestas;
+    private List<Respuesta> subrespuestas = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -54,15 +53,31 @@ public class Respuesta {
     private Set<Usuario> usuariosParticipantes = new HashSet<>();
 
 
+    private String imagen;
+
+
+    private Date fechaCreacion;
+
+
     // Constructor vacío
     public Respuesta() {
     }
 
     // Constructor con parámetros
-    public Respuesta(Long isReport, String contenido, int cantidadReacciones) {
+
+    public Respuesta(Long id, Long isReport, String contenido, int cantidadReacciones, Hilo hilo, Respuesta respuestaPadre, List<Respuesta> subrespuestas, Usuario usuario, Set<Usuario> usuariosParticipantes, String imagen,
+                     Date fechaCreacion) {
+        this.id = id;
         this.isReport = isReport;
         this.contenido = contenido;
         this.cantidadReacciones = cantidadReacciones;
+        this.hilo = hilo;
+        this.respuestaPadre = respuestaPadre;
+        this.subrespuestas = subrespuestas;
+        this.usuario = usuario;
+        this.usuariosParticipantes = usuariosParticipantes;
+        this.imagen = imagen;
+        this.fechaCreacion = fechaCreacion;
     }
 
     // Getters y setters
@@ -136,5 +151,29 @@ public class Respuesta {
 
     public void setUsuariosParticipantes(Set<Usuario> usuariosParticipantes) {
         this.usuariosParticipantes = usuariosParticipantes;
+    }
+
+    public Long getIsReport() {
+        return isReport;
+    }
+
+    public void setIsReport(Long isReport) {
+        this.isReport = isReport;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }

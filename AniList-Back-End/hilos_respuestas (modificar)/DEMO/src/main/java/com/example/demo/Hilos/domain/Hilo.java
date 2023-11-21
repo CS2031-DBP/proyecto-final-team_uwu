@@ -6,7 +6,10 @@ import com.example.demo.Labels.domain.Label;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,12 +46,12 @@ public class Hilo {
     private Long cantidadReports;
 
     @ManyToMany
-    @JoinTable(name = "hilo_label",
+    @JoinTable(
+            name = "hilo_label",
             joinColumns = @JoinColumn(name = "hilo_id"),
-            inverseJoinColumns = @JoinColumn(name = "label_id"))
-    private List<Label> labels;
-
-
+            inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private List<Label> labels = new ArrayList<>();
     public Hilo() {
     }
 
@@ -137,4 +140,32 @@ public class Hilo {
     public void setLabels(List<Label> labels) {
         this.labels = labels;
     }
+
+    // Métodos para manejar la relación
+    public void addLabel(Label label) {
+        labels.add(label);
+        label.getHilos().add(this); // Establecer la relación inversa
+    }
+
+    public void removeLabel(Label label) {
+        labels.remove(label);
+        label.getHilos().remove(this); // Eliminar la relación inversa
+    }
+    @PrePersist
+    protected void onCreate() {
+        fechaCreacion = convertirFechaHoraATimeZonePeru(ZonedDateTime.now());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fechaCreacion = convertirFechaHoraATimeZonePeru(ZonedDateTime.now());
+    }
+
+    private Date convertirFechaHoraATimeZonePeru(ZonedDateTime fechaHoraUTC) {
+        ZonedDateTime fechaHoraPeru = fechaHoraUTC.withZoneSameInstant(ZoneId.of("America/Lima"));
+        return Date.from(fechaHoraPeru.toInstant());
+    }
+
+
+
 }

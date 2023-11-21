@@ -2,14 +2,16 @@ package com.example.demo.Labels.domain;
 
 
 import com.example.demo.Hilos.domain.Hilo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "label")
 public class Label{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,18 +20,16 @@ public class Label{
     private String valor;
 
     @ManyToMany(mappedBy = "labels")
-    @JsonIgnoreProperties("labels")
-    private List<Hilo> hilos;
+    @JsonIgnore
+    private List<Hilo> hilos = new ArrayList<>();
 
     public Label() {
     }
 
-    public Label(String valor,List<Hilo> hilos) {
+    public Label(String valor) {
         this.valor = valor;
-        this.hilos = hilos;
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -38,15 +38,21 @@ public class Label{
         this.id = id;
     }
 
-    public String getvalor() {
-        return this.valor;
+    public String getValor() {
+        return valor;
     }
 
-    public void setvalor(String valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
-    public List<Hilo> getHilos(){return this.hilos;}
-    public void setHilos(List<Hilo>hilos){this.hilos=hilos;}
+
+    public List<Hilo> getHilos() {
+        return hilos;
+    }
+
+    public void setHilos(List<Hilo> hilos) {
+        this.hilos = hilos;
+    }
 }
 
 

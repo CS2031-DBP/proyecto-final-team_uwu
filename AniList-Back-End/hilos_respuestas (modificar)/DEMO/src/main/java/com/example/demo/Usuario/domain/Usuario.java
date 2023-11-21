@@ -1,6 +1,7 @@
 package com.example.demo.Usuario.domain;
 
 import com.example.demo.CapaSeguridad.domain.Role;
+import com.example.demo.Estados.domain.Estados;
 import com.example.demo.Hilos.domain.Hilo;
 import com.example.demo.Respuesta.domain.Respuesta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,10 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "_usuario")
@@ -28,6 +26,10 @@ public class Usuario implements UserDetails {
     private String email;
 
     private String image_path;
+
+    private String background_picture;
+
+    private String enlace_imagen;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -44,7 +46,30 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<Respuesta> respuestasParticipadas = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Estados> estados = new HashSet<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Respuesta> respuestas = new ArrayList<>();
+
     public Usuario() {
+    }
+
+    public Usuario(Long id, String nickname, String password, String email, String image_path, String background_picture, String enlace_imagen, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas,
+                   Set<Estados> estados, List<Respuesta> respuestas) {
+        this.id = id;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.image_path = image_path;
+        this.background_picture = background_picture;
+        this.enlace_imagen = enlace_imagen;
+        this.role = role;
+        this.favoriteAnimeIds = favoriteAnimeIds;
+        this.hilosCreados = hilosCreados;
+        this.respuestasParticipadas = respuestasParticipadas;
+        this.estados = estados;
+        this.respuestas = respuestas;
     }
 
     public Role getRole() {
@@ -62,20 +87,6 @@ public class Usuario implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    public Usuario(Long id, String nickname, String contraseña, String correo, String image_path, Role role, Set<Long> favoriteAnimeIds, Set<Hilo> hilosCreados, Set<Respuesta> respuestasParticipadas) {
-        this.id = id;
-        this.nickname = nickname;
-        this.password = contraseña;
-        this.email = correo;
-        this.image_path = image_path;
-        this.role = role;
-        this.favoriteAnimeIds = favoriteAnimeIds;
-        this.hilosCreados = hilosCreados;
-        this.respuestasParticipadas = respuestasParticipadas;
-    }
-
-
 
     public Long getId() {
         return id;
@@ -126,6 +137,22 @@ public class Usuario implements UserDetails {
         this.respuestasParticipadas = respuestasParticipadas;
     }
 
+    public String getBackground_picture() {
+        return background_picture;
+    }
+
+    public void setBackground_picture(String background_picture) {
+        this.background_picture = background_picture;
+    }
+
+    public String getEnlace_imagen() {
+        return enlace_imagen;
+    }
+
+    public void setEnlace_imagen(String enlace_imagen) {
+        this.enlace_imagen = enlace_imagen;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -159,5 +186,25 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Set<Estados> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(Set<Estados> estados) {
+        this.estados = estados;
+    }
+
+    public List<Respuesta> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<Respuesta> respuestas) {
+        this.respuestas = respuestas;
     }
 }

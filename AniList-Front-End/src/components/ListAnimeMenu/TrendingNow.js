@@ -46,10 +46,11 @@ export const TrendingNow = () => {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 7,
     slidesToScroll: 2,
     autoplay: true,
     pauseOnHover:true,
+
   };
   
 
@@ -68,7 +69,7 @@ export const TrendingNow = () => {
                   ) : ''}>
                 </img>
                 <div className='percentage'>
-                  {anime.averageScore + '%'}
+                  {anime.averageScore!==null?(anime.averageScore + '%'):''}
                 </div>
               </div>
               <div className="genres">

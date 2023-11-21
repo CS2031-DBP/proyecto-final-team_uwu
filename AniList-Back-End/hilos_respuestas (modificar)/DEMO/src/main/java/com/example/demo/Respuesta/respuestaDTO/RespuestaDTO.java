@@ -1,57 +1,48 @@
 package com.example.demo.Respuesta.respuestaDTO;
 
-import com.example.demo.Usuario.usuarioDTO.UsuarioDTO_thread;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RespuestaDTO {
-    private Long id;
 
+    private Long id;
     @Size(max = 3000)
     private String contenido;
     private List<Long> subRespuestaIds = new ArrayList<>();
 
+    private Long RespuestaPadreId;
+
     private Long HiloId;
 
-    private Long usuarioid;
+    private String nickname;
 
-    private UsuarioDTO_thread usuarioM = new UsuarioDTO_thread();
+    private String imagen;
+
+    private Long report = 0L ;
+
+    private int cantidadReacciones = 0;
+
+    private Date fechaCreacion;
 
     public RespuestaDTO() {
     }
 
-    public UsuarioDTO_thread getUsuarioM() {
-        return usuarioM;
-    }
 
-    public void setUsuarioM(UsuarioDTO_thread usuarioM) {
-        this.usuarioM = usuarioM;
-    }
-
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid, UsuarioDTO_thread usuarioM) {
-        this.id = id;
+    public RespuestaDTO(String contenido, List<Long> subRespuestaIds, Long hiloId, String nickname, String imagen,Long RespuestaPadreId,Long report,int cantidadReacciones,Long id,
+                        Date fechaCreacion) {
         this.contenido = contenido;
         this.subRespuestaIds = subRespuestaIds;
         HiloId = hiloId;
-        this.usuarioid = usuarioid;
-        this.usuarioM = usuarioM;
-    }
-    public RespuestaDTO(Long id, String contenido, List<Long> subRespuestaIds, Long hiloId, Long usuarioid) {
+        this.nickname = nickname;
+        this.imagen = imagen;
+        this.RespuestaPadreId = RespuestaPadreId;
+        this.report = report;
+        this.cantidadReacciones = cantidadReacciones;
         this.id = id;
-        this.contenido = contenido;
-        this.subRespuestaIds = subRespuestaIds;
-        HiloId = hiloId;
-        this.usuarioid = usuarioid;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public String getContenido() {
@@ -78,11 +69,60 @@ public class RespuestaDTO {
         HiloId = hiloId;
     }
 
-    public Long getUsuarioid() {
-        return usuarioid;
+
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsuarioid(Long usuarioid) {
-        this.usuarioid = usuarioid;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public Long getRespuestaPadreId() {
+        return RespuestaPadreId;
+    }
+
+    public void setRespuestaPadreId(Long respuestaPadreId) {
+        RespuestaPadreId = respuestaPadreId;
+    }
+
+    public Long getReport() {
+        return report;
+    }
+
+    public void setReport(Long report) {
+        this.report = report;
+    }
+
+    public int getCantidadReacciones() {
+        return cantidadReacciones;
+    }
+
+    public void setCantidadReacciones(int cantidadReacciones) {
+        this.cantidadReacciones = cantidadReacciones;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }
