@@ -53,9 +53,7 @@ export const Profile = ({userId}) => {
             if (response.status === 200) {
                 console.log("post image");
                 console.log(response.data);
-                if(response.data.image_path !== null){
                   localStorage.setItem('userImage', response.data.image_path);
-                }
             }
             console.log(response.status); 
           } catch (error) {
@@ -73,9 +71,7 @@ export const Profile = ({userId}) => {
                 if (response.status === 200) {
                     console.log("post banner");
                     console.log(response.data);
-                    if(response.data.background_picture !== null){
                       localStorage.setItem('userBanner', response.data.background_picture);
-                    }
                 }
                 console.log(response.status); 
               } catch (error) {
